@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateExpoImagesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('expo_images', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('expo_id')->unsigned()->comment('expos.id');
+            $table->string('url')->comment('image url');
+            $table->smallInteger('sort')->unsigned()->default('1');
+            $table->timestamps();
+            $table->index(['expo_id', 'sort']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('expo_images');
+    }
+}

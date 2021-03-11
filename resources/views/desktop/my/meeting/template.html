@@ -1,0 +1,261 @@
+<script id="viewpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="title m-0">
+                미팅 신청 내역
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body pt-0">
+            <div class="card card-meeting card-plain">
+                <div class="card-body">
+                    <ul>
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="form-title">상태</span>
+                                </div>
+                                <div class="col-8">
+                                    {{#if (isEqual meeting_status 'A')}}
+                                        {{#if meeting_ready}}
+                                            <span class="text-info">승인</span>
+                                        {{else}}
+                                            <span class="">미팅종료</span>
+                                        {{/if}}
+                                    {{else}}
+                                        {{{meetingstatus meeting_status}}}
+                                    {{/if}}
+
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="form-title">박람회 명</span>
+                                </div>
+                                <div class="col-8">
+                                    {{expo_name}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="form-title">부스 명</span>
+                                </div>
+                                <div class="col-8">
+                                    {{booth_title}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="form-title">예약 시간</span>
+                                </div>
+                                <div class="col-8">
+                                    {{dateformat meeting_date 'Y.MM.D'}} {{meeting_time}}:00~{{addtime meeting_time}}:00
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="form-title">신청 내용</span>
+                                </div>
+                                <div class="col-8">
+                                    <textarea class="form-control" rows="8" readonly>{{meeting_msg}}</textarea>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            {{#if meeting_confirmed}}
+                <a href='/meeting/{{meeting_cid}}' class="btn btn-sm btn-warning" target="_blank">미팅참가</a>
+            {{else}}
+                <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-sm btn-black">닫기</button>
+            {{/if}}
+        </div>
+    </div>
+</script>
+<script id="confirmpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <form name="meeting-confirm" class="meeting-confirm" method="post">
+            <input type="hidden" name="meeting_id" value="{{id}}">
+            <input type="hidden" name="status" value="">
+            <div class="modal-header">
+                <h5 class="title m-0">
+                    1:1화상회의 요청 내역
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+
+            </div>
+            <div class="modal-body pt-0">
+                <div class="card card-meeting card-plain">
+                    <div class="card-body">
+                        <ul>
+                            <li>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <span class="form-title">상태</span>
+                                    </div>
+
+                                    <div class="col-8">
+                                        {{#if (isEqual meeting_status 'A')}}
+                                            {{#if meeting_ready}}
+                                                <span class="text-info">승인</span>
+                                            {{else}}
+                                                <span class="">미팅종료</span>
+                                            {{/if}}
+                                        {{else}}
+                                            {{{meetingstatus meeting_status}}}
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <span class="form-title">요청 시간</span>
+                                    </div>
+                                    <div class="col-8">
+                                        {{dateformat meeting_date 'Y.MM.D'}} {{meeting_time}}:00~{{addtime meeting_time}}:00
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <span class="form-title">신청 부스</span>
+                                    </div>
+                                    <div class="col-8">
+                                        {{booth_title}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <span class="form-title">이름</span>
+                                    </div>
+                                    <div class="col-8">
+                                        {{name}}
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <span class="form-title">이름</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <a href="mailto:{{email}}">{{email}}</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <span class="form-title">신청 내용</span>
+                                    </div>
+                                    <div class="col-8">
+                                        <textarea class="form-control" rows="8" readonly>{{meeting_msg}}</textarea>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-start">
+                {{#if (isEqual meeting_status 'R') }}
+                    <div class="ml-auto">
+                        <button type="button" class="btn btn-sm btn-info btn-ajax mr-2" onclick="confirm('A')">승인</button>
+                        <button type="button" class="btn btn-sm btn-danger btn-ajax mr-2" onclick="confirm('D')">거절</button>
+                    </div>
+                {{else if (isEqual meeting_status 'A')}}
+                    {{#if meeting_ready}}
+                        <div class="ml-auto">
+                            <h5>화상회의 시 유의사항</h5>
+                            <ul class="list-group">
+                                <li>상호 예의를 갖추어 화상회의를 진행해 주시기 바랍니다.</li>
+                                <li>전시회에 참여한 기업이 호스트, 요청을 하신 회원이 게스트 입니다.</li>
+                                <li>화상회의를 늦게 시작하더라도 끝나는 시간은 항상 고정되어 있습니다.</li>
+                                <li>화상회의 시작 전 3분까지는 준비를 마무리 해주시길 바랍니다.</li>
+                                <li>가급적 상대방에게 자신의 얼굴이 잘 보일 수 있도록 해주시기 바랍니다.</li>
+                                <li>정해진 시간이 지났을 경우 시스템에 의해 강제로 닫히는 경우가 발생할 수 있습니다.</li>
+                                <li>회의가 종료되면 반드시 ‘회의 나가기’ 버튼을 눌러 주시기 바랍니다.</li>
+                            </ul>
+                            <h5>이용 확인</h5>
+                            <div class="form-group">
+                                <textarea rows="5" class="form-control">본 서비스는 way2expo에서 준비하여 Zoom을 통해 way2expo 회원님에게 제공하는 화상회의 서비스입니다.
+화상회의 중 발생한 기술적 문제는 way2expo와 관련이 없습니다.
+화상회의 중 신청 및 승인을 한 당사자만 회의에 참여할 수 있으며 회의 진행 중 발생한 모든 사항은 상호간의 책임이 있으며, Way2expo와 관련없음을 확인합니다.</textarea>
+                            </div>
+                            <a href='/meeting/{{meeting_cid}}' class="btn btn-sm btn-warning float-right" target="_blank">미팅참가</a>
+                        </div>
+                    {{else}}
+                    {{/if}}
+                {{else}}
+                    <div class="ml-auto">
+                        <button type="button" class="btn btn-sm btn-black" data-dismiss="modal" aria-label="Close">
+                            닫기
+                        </button>
+                    </div>
+                {{/if}}
+            </div>
+        </form>
+
+    </div>
+    <script type="text/javascript">
+        var saveForm = $('form[name=meeting-confirm]');
+
+        function confirm(status) {
+
+            Swal2.fire({
+                html: (status === 'A') ? '이 1:1화상회의 요청내역을<br>승인하시겠습니까?' : '요청을 반려하시겠습니까?<br>반려한 요청은 복구할 수 없습니다',
+                icon: 'warning',
+                showConfirmButton: true,
+                showCancelButton: true,
+            }).then(function (value) {
+                if (value.isConfirmed) {
+                    saveForm.find('input[name=status]').val(status);
+                    saveForm.submit();
+                }
+            });
+        }
+
+        $(function () {
+            saveForm.submit(function (e) {
+                e.preventDefault();
+                var button = $(this).find("button[type=submit]");
+                var formData = new FormData(this);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/my/meeting/confirm",
+                    dataType: "JSON",
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.result === 'OK') {
+                            dataTable.ajax.reload(null, false);
+                            confirmPopup(res.msg, 'success')
+                            $('#modal-default').modal('hide')
+                        }
+                    },
+                });
+            });
+
+        });
+</script>

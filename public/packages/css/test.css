@@ -1,0 +1,232 @@
+.font-15{font-size: 15px;}
+.font-16{font-size: 16px;}
+.font-17{font-size: 17px;}
+.font-18{font-size: 18px;}
+.font-19{font-size: 19px;}
+.swiper-container-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet {
+    margin: 0 1px 0 0;
+}
+.swiper-pagination-bullet {
+    width: 14px;
+    height: 6px;
+    display: inline-block;
+    border-radius: inherit;
+	border: 1px solid #FFF;
+}
+
+.new-block-size .swiper-slide {
+    font-size: 25px;
+    font-weight: 300;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    background: #fff;
+    color: #000;
+}
+.new-block-size .swiper-slide {
+    box-sizing: border-box;
+    background: #fff;
+}
+.new-block-size .swiper-slide {
+    width: 85%;
+}
+
+
+
+  /* page navbar color */
+:root{
+    --navbar-bg-new-color : #666;
+}
+.navbar-new .navbar-bg{
+  --f7-navbar-bg-color : rgb(247, 247, 248);
+}
+.navbar-new .title{
+ color : var(--navbar-bg-new-color);
+}
+.navbar.navbar-new a.link, .navbar.navbar-new .material-icons{
+  color : var(--navbar-bg-new-color);
+}
+
+
+
+.background-pos-top{background-position:center top !important;}
+.pt-0{padding-top: 0 !important;}
+.pl-0 {padding-left: 0 !important}
+.pr-0 {padding-right: 0 !important}
+.pb-0 {padding-bottom: 0 !important}
+.count_span{margin-left:10px;}
+.demo-card-header-pic{
+  margin-bottom: 26px;
+}
+.demo-card-header-pic .card-header {
+  min-height: 300px;
+  background-position: center top;
+  }
+.expo_over{
+    flex-grow: 1;
+    background-color: rgb(51 51 51 / 73%);
+    padding: 10px 5px;
+    display: flex;
+    /*justify-content: space-between;*/
+    justify-content: flex-end;
+    box-shadow: var(--f7-card-box-shadow);
+}
+.expo_over_inner_wrap{
+  display: flex;
+  align-items: center;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.expo_over_inner_wrap > .material-icons , .expo_over_inner_wrap >.count_span {
+    font-size: 17px !important;
+}
+.card-expo-title{
+  font-size: 16px;
+  font-weight: 500;
+  color: #6b6b6b;
+}
+.expo-title{
+  margin-bottom: 5px;
+}
+.expo-opentime{
+  font-size: 14px;
+}
+.expo-location{
+  font-size: 14px;
+}
+
+#search-expo-fail-box, #search-booth-fail-box{
+  text-align: center;
+  color: #669FAB;
+  padding: 40px 5px;
+  display:none;
+}
+#search-booth-fail-box{
+  background-color: white;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+#search-expo-fail-box .material-icons,
+#search-booth-fail-box .material-icons
+{
+  font-size: 60px;
+}
+
+.icon-only2{
+  width: 40px !important;
+  padding: 0 0 0 10px !important;
+}
+
+
+
+
+.expo-detail-top-img-over{
+  position: absolute;
+    z-index: 2;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 10px 20px;
+
+    border-bottom-left-radius: var(--top-img-border-left-radius);
+    border-bottom-right-radius: var(--top-img-border-right-radius);
+    background-color: rgb(51 51 51 / 50%);
+}
+.expo-detail-top-img-over-inner{
+  display: flex;
+  justify-content: space-between;
+}
+.expo-detail-top-img-over a{
+  color:white;
+}
+.circle_btn_36{
+  padding: 3px;
+    height: 36px;
+    width: 36px;
+    background: black;
+    border-radius: 50%;
+}
+.expo-description-box{
+  padding: 10px;
+font-size: 14px;
+font-weight: 500;
+color: #333;
+}
+.fixedtoolbar{
+  background-color: white;
+  position: fixed;
+  top: 56px;
+  z-index: 100;
+}
+.pop-close-icon-btn{
+  position: absolute;
+  right: 0;
+  z-index: 10;
+}
+.pop-close-icon-btn > a > .material-icons{
+  color:#666;
+}
+.pop-office-change p {
+  font-size: 16px;
+}
+.pop-office-icon{
+  font-size: 52px;
+  padding: 15px;
+  background-color: #494975;
+  color: white;
+  border-radius: 50%;
+}
+.pop-office-change-title{
+  display: flex;
+  padding: 10px 5px;
+}
+.pop-office-change-title > .material-icons {
+  font-size: 16px;
+  line-height: 30px;
+  height: 30px;
+}
+.pop-office-change-title > .office-change-subtitle{
+  line-height: 22px;
+  font-size: 20px;
+  vertical-align: baseline;
+  margin-top: 5px;
+  height: 30px;
+  padding-left: 10px;
+}
+
+.booth-card{width: 100%;}
+.booth-card-content-padding{
+  padding: 10px 5px;
+}
+.card-expo-title{
+  text-overflow: ellipsis;
+white-space: nowrap;
+overflow: hidden;
+}
+.booth-row-box {
+  margin: 10px 5px;
+
+background-color: white;
+border-radius: 10px;
+}
+.list.no-gap .item-content {
+  padding-left:0;
+}
+.list.no-gap .item-inner{
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 0;
+  padding-right: 0;
+}

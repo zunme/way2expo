@@ -1,0 +1,161 @@
+<script id="viewpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="title m-0">
+                비즈니스 문의 상세 내역
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body pt-0">
+            <div class="card card-meeting card-plain">
+                <div class="card-body">
+                    <ul>
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="form-title">박람회명</span>
+                                </div>
+                                <div class="col-8">
+                                    {{booth_info.expo_booth.expo_name}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="form-title">부스명</span>
+                                </div>
+                                <div class="col-8">
+                                    {{booth_info.booth_title}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="form-title">신청일시</span>
+                                </div>
+                                <div class="col-8">
+                                    {{dateformat created_at 'Y.MM.D'}}
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="row">
+                                <div class="col-4">
+                                    <span class="form-title">신청 코멘트</span>
+                                </div>
+                                <div class="col-8" style="height: 250px;overflow-y: scroll;">
+                                    {{message}}
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-sm btn-black">닫기</button>
+        </div>
+    </div>
+
+</script>
+<script id="viewcardpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="title m-0">
+                비즈니스 문의
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body pt-0">
+            <div class="card card-meeting card-plain">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <h5>문의 내용</h5>
+                            <ul>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <span class="form-title">보낸일시</span>
+                                        </div>
+                                        <div class="col-8">
+                                            {{dateformat created_at 'Y.MM.D'}}
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <span class="form-title">소개 및 인사말</span>
+                                        </div>
+                                        <div class="col-8" style="height:250px;overflow-y:scroll">
+                                            {{nl2br message}}
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <h5>명함</h5>
+                            <div class="pane" style="height:300px;overflow-x:hidden;overflow-y:scroll">
+                                <div class="row">
+                                    <div class="col-12">
+                                        {{#if (checkempty cards.card)}}
+                                            텍스트 명함 없음
+                                        {{else}}
+                                            <div class="d-flex justify-content-between">
+                                                <div class="card_name">{{cards.card.card_name}}</div>
+                                                <div class="d-flex">
+                                                    <div class="card_dept f-slash">{{cards.card.card_dept}}</div>
+                                                    <div class="card_position">{{cards.card.card_position}}</div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <div class="card_company">{{cards.card.card_company}}</div>
+                                            </div>
+                                            <div class="d-flex">
+                                                <div class="card_tel">{{cards.card.card_tel}}</div>
+                                            </div>
+                                            <div class="d-flex">
+                                                <div class="card_email">{{cards.card.card_email}}</div>
+                                            </div>
+                                            <div class="d-flex">
+                                                <div class="card_homepage">{{cards.card.card_homepage}}</div>
+                                            </div>
+                                        {{/if}}
+                                    </div>
+                                    <div class="col-12">
+                                        {{#if (checkempty cards.business_card_front)}}
+                                            이미지 명함 앞면 없음
+                                        {{else}}
+                                            <img src="/storage/{{cards.business_card_front}}" alt=""
+                                                 class="img img-fluid">
+                                        {{/if}}
+                                    </div>
+                                    <div class="col-12">
+                                        {{#if (checkempty cards.business_card_back)}}
+                                            이미지 명함 뒷면 없음
+                                        {{else}}
+                                            <img src="/storage/{{cards.business_card_back}}" alt=""
+                                                 class="img img-fluid">
+                                        {{/if}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="btn btn-sm btn-black">닫기</button>
+        </div>
+    </div>
+
+</script>

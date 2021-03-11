@@ -1,0 +1,691 @@
+<div class="modal fade" id="snsModal" tabindex="-1" role="dialog" aria-labelledby="share"
+     aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered mt-0" role="document" style="max-width:270px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="title modal-title m-0" id="exampleModalLabel">SNS 공유</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-3">
+                <div class="row justify-content-center">
+                    <div class="col-12 text-center">
+                        <button type="button" class="btn btn-social btn-just-icon btn-facebook mr-2" id="fb-share-btn">
+                            <i class="fa fa-facebook" style="font-size:28px;"> </i>
+                        </button>
+                        <button type="button" class="btn btn-social btn-just-icon mr-2" id="blog-share-btn"
+                                style="vertical-align: top;background-color:transparent;">
+                            <img src="/image/sns/naverblog.png" alt="" class="img img-fluid align-top">
+                        </button>
+                        <button type="button" class="btn btn-social btn-just-icon mr-2" id="kakao-share-btn">
+                            <img src="/image/sns/kakaotalk.png" alt="" class="img img-fluid align-top">
+                        </button>
+                    </div>
+                    <div class="col-12 mt-3 d-flex justify-content-center">
+                        <div class="clipboard">
+                            <div class="input-group">
+                                <input type="text" class="form-control">
+                                <div class="input-group-append">
+                                    <button class="btn btn-sm btn-black">복사</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal-booth" role="dialog" aria-hidden="true" data-backdrop="static"
+     data-keyboard="true">
+</div>
+<div class="modal fade" id="modal-product" role="dialog" aria-hidden="true" data-backdrop="static"
+     data-keyboard="false">
+</div>
+<script id="template-expo-booth-detail" type="text/x-handlebars-template">
+    <div class="booth-sticky-top">
+        <div class="booth-sticky-content">
+            <div class="container">
+                <button
+                    type="button"
+                    class="btn btn-sm btn-black btn-fab btn-round btn-favorite"
+                    data-id="{{booth.id}}"
+                    data-favorite="booth"
+                    data-toggle="tooltip" title="즐겨찾기">
+                    <i class="material-icons {{#if (isFavorite 'booth' booth.id)}}text-warning{{/if}}">star</i>
+                </button>
+                <button type="button" class="btn btn-sm btn-black btn-fab btn-round" data-toggle="modal"
+                        data-target="#snsModal">
+                    <i class="material-icons">share</i>
+                </button>
+                <button class="btn btn-sm btn-black btn-fab btn-round" onclick="history.back(-1);" aria-label="Close">
+                    <i class="material-icons" aria-hidden="true">close</i>
+                </button>
+
+                <p class="booth-title-expo m-0">
+                    {{expo.expo_name}}
+                </p>
+                <h2 class="title m-0">{{booth.booth_title}}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="modal-dialog modal-lg booth-dialog" id="modal-booth-area">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-black btn-fab btn-round btn-favorite"
+                        data-id="{{booth.id}}"
+                        data-favorite="booth"
+                        data-toggle="tooltip" title="즐겨찾기"
+                        style="z-index: 2;">
+                        <i class="material-icons {{#if (checknotempty favorite)}}text-warning{{/if}}">star</i>
+                    </button>
+
+                    <button type="button" class="btn btn-sm btn-black btn-fab btn-round" data-toggle="modal"
+                            data-target="#snsModal">
+                        <i class="material-icons">share</i>
+                    </button>
+                    {{#if (isEqual myBooth true)}}
+                        <a class="btn btn-sm btn-fab btn-round btn-warning" href="/my/booth/detail/{{booth.id}}"
+                           target="_blank" role="button"><i class="material-icons">settings</i></a>
+                    {{/if}}
+
+                </div>
+                <button class="btn btn-sm btn-black btn-fab btn-round" onclick="history.back(-1);" aria-label="Close">
+                    <i class="material-icons" aria-hidden="true">close</i>
+                </button>
+            </div>
+            <div class="page-header header-filter booth-header" data-parallax="false"
+                 style="background-image: url('{{#unless
+                     (checkempty booth.booth_image_url)}}/storage/{{booth.booth_image_url}}{{/unless}}');">
+                <div class="container">
+                    <p class="booth-title-expo m-0">
+                        {{expo.expo_name}}
+                    </p>
+                    <h2 class="title m-0">{{booth.booth_title}}</h2>
+                </div>
+                <div class="text-right"
+                     style="position:absolute;width: 100%;height:auto;right:0;bottom:10px;z-index:2;">
+                    <div class="row justify-content-between">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6">
+                            <p class="m-0 pr-3">
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body" style="min-height:500px;">
+                <div class="row justify-content-center">
+                    <ul class="nav nav-pills nav-pills-black booth-tabs p-0" id="tab-booth" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link nav-pills-danger nav-pills-icons btn-live" href="/live/view/{{booth.id}}"
+                               target="_blank"
+                               role="button"
+                               style="display:none;color: #fff;background-color: #f44336;border-color: #f44336;box-shadow: none;">LIVE
+                                <i class="material-icons"
+                                   style="padding: 0;display: inline-block;font-size: 1rem;vertical-align: sub;">open_in_new</i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-booth-intro active" data-toggle="tab" href="#booth-intro" role="tab"
+                               aria-expanded="true">
+                                부스 소개
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-booth-product" data-toggle="tab" href="#booth-product" role="tab"
+                               aria-expanded="true">
+                                전시상품
+                            </a>
+                        </li>
+                        {{#if booth.company_id}}
+                        {{/if}}
+                        <li class="nav-item">
+                            <a class="nav-link nav-booth-meeting" data-toggle="tab" href="#booth-meeting" role="tab"
+                               aria-expanded="false">
+                                1:1 화상회의
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-booth-contact" data-toggle="tab" href="#booth-contact" role="tab"
+                               aria-expanded="false">
+                                비즈니스 문의
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content tab-space pb-0">
+                    <div class="tab-pane active" role="tabpanel" id="booth-intro" aria-expanded="true">
+                        <div class="youtube-player" data-url="{{booth.booth_youtube_url}}">
+                        </div>
+                        {{#unless (checkempty booth.booth_image_url)}}
+                            <div class="section">
+                                <img src="/storage/{{booth.booth_image_url}}" class="img img-fluid booth-image" alt="">
+                            </div>
+                        {{/unless}}
+                        {{#if (gt booth.booth_attach.length 0 )}}
+                            <div class="row justify-content-center">
+                                {{#each booth.booth_attach}}
+                                    <div class="col-12 text-center">
+                                        <img src="/storage/{{ url }}" class="img img-fluid booth-image" alt="">
+                                    </div>
+                                {{/each}}
+                            </div>
+                        {{/if}}
+                        <div class="section p-3 booth-description">
+                            <p>{{ booth.booth_intro }}</p>
+                        </div>
+                        <div class="section p-3 booth-tags">
+                            <p>
+                                {{#each booth.tags}}
+                                    {{name}}
+                                {{/each}}
+                            </p>
+                        </div>
+
+                        <h4 class="title mb-0">회사 소개</h4>
+                        <hr>
+                        <div class="card card-plain card-search-booth">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="card-header card-header-image">
+                                        {{#if (checknotempty booth.company_booth.company_image_url)}}
+                                            <img src="/storage/{{ booth.company_booth.company_image_url }}"
+                                                 class="img img-fluid" height="215" alt="">
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div class="card-body p-0">
+                                        <ul class="list-group">
+                                            <li class="list-group-item">{{ booth.company_booth.company_name }}</li>
+                                            <li class="list-group-item">{{ booth.company_booth.company_url }}</li>
+                                            <li class="list-group-item">{{ booth.company_booth.company_email }}</li>
+                                            <li class="list-group-item">{{ booth.company_booth.company_tel1 }}</li>
+                                            <li class="list-group-item">{{ booth.company_booth.company_info1 }}</li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="booth-meeting" aria-expanded="true">
+                        <div class="tab-pane-body">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4 class="title mt-2">미팅 신청 날짜</h4>
+                                    <!-- input with datetimepicker -->
+                                    <div class="form-group">
+                                        <input type="text" class="form-control datetimepicker mb-3 d-none" value=""
+                                               placeholder="">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <h4 class="title mt-2 mb-0">미팅 신청 시간</h4>
+                                    <p class="timetables-date"></p>
+                                    <div class="timetables list-group row">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="booth-product" aria-expanded="true">
+                        <div class="tab-pane-body"></div>
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="booth-contact" aria-expanded="true">
+                        <div class="tab-pane-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var booth_id = {{booth.id}};
+
+        $(function () {
+            $('[data-toggle=tab]').tab();
+            $('.datetimepicker').on('dp.show', function (e) {
+                getTimeTables(e.target.value);
+            });
+            $('.datetimepicker').datetimepicker({
+                locale: 'ko',
+                keepOpen: true,
+                inline: true,
+                debug: true,
+                format: 'YYYY-MM-DD',
+                useCurrent: false,
+                minDate: '{{ startdate }}',
+                maxDate: '{{expo.expo_close_date}}',
+                defaultDate: '{{ startdate }}',
+                showClose: false,
+                keyBinds: {'enter': null},
+                icons: {
+                    time: "fa fa-clock-o",
+                    date: "fa fa-calendar",
+                    up: "fa fa-caret-up",
+                    down: "fa fa-caret-down",
+                    previous: "fa fa-caret-left",
+                    next: "fa fa-caret-right",
+                    today: "fa fa-today",
+                    clear: "fa fa-clear",
+                    close: "fa fa-close"
+                }
+            }).on('dp.change', function (e) {
+                getTimeTables(e.target.value);
+            })
+        });
+
+        function getTimeTables(val) {
+            $.getJSON('/reserve-timetable', {'booth': {{booth.id}}, 'date': val}).done(function (res) {
+                // console.log('get-timetable', res.data);
+                drawTimeList(res.data);
+            });
+        }
+
+        function drawTimeList(data) {
+            var items = [];
+            var i = 1;
+            $.each(data, function () {
+                var isAvailable = (this.avail_date && this.reservation_available);
+                var no = ordinal_suffix_of(i);
+                var timeText = this.startTimeDisplay + ':00 ~ ' + this.endTimeDisplay + ':00';
+                var badge = $('<span>', {
+                    class: (isAvailable) ? 'badge badge-info' : 'badge badge-black',
+                    text: (isAvailable) ? '신청가능' : '신청불가',
+                })
+
+                var item = $('<button>', {
+                    type: 'button',
+                    class: 'list-group-item btn btn-sm btn-outline-black btn-block',
+                    disabled: (!isAvailable),
+                    'data-ordinal-suffix': no,
+                    'data-meeting-date': this.date,
+                    'data-meeting-time': this.startTimeDisplay,
+                    'data-meeting-time-text': timeText,
+                    onclick: (isAvailable) ? 'expoDetail.reservePop(this)' : '',
+                }).append(
+                    $('<div>', {
+                        class: 'col m-0 p-0',
+                        text: no + ' ' + timeText,
+                    }).append(badge)
+                );
+                items.push(item);
+                i++;
+            })
+            $(".timetables").empty();
+            $('.timetables').html(items);
+        }
+
+        function ordinal_suffix_of(i) {
+            var j = i % 10,
+                k = i % 100;
+            if (j == 1 && k != 11) {
+                return i + "st";
+            }
+            if (j == 2 && k != 12) {
+                return i + "nd";
+            }
+            if (j == 3 && k != 13) {
+                return i + "rd";
+            }
+            return i + "th";
+        }
+</script>
+<script id="cardpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="title modal-title m-0" id="exampleModalLabel">1:1 화상회의 신청</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form name="reserve" method="post">
+            <input type="hidden" name="expo_code" value="{{ expo_code }}">
+            <input type="hidden" name="booth_id" value="{{ booth_id }}">
+            <input type="hidden" name="meeting_date" value="{{ meeting_date }}">
+            <input type="hidden" name="meeting_time" value="{{ meeting_time }}">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>신청 일자</label>
+                    <input type="text" class="form-control" value="{{ meeting_date }} {{ordinal-suffix}} {{ text }}"
+                           disabled>
+                </div>
+                <div class="form-group">
+                    <label>개인정보 제공동의</label>
+                    <textarea class="form-control" rows="5"
+                              placeholder="동의 내용" readonly>기업 명: {{ booth.company_booth.company_name }}</textarea>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="agree"
+                                   id="inlineCheckbox1" value="Y"> 동의합니다.
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>신청 코멘트</label>
+                    <textarea class="form-control" name="meeting_msg" rows="3"
+                              placeholder="1:1 화상회의를 신청하는 사유를 간단히 입력해주시기 바랍니다."></textarea>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-sm btn-black btn-ajax">미팅신청</button>
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(function () {
+            var reserveForm = $('form[name=reserve]');
+
+            reserveForm.find("button[type=submit]").click(function (e) {
+                e.preventDefault();
+                var formData = reserveForm.serializeObject();
+                $.ajax({
+                    type: 'POST',
+                    url: "/reserve",
+                    data: formData,
+                    dataType: 'JSON',
+                    success: function (res) {
+                        var options = {
+                            toast: false,
+                            title: res.msg,
+                            text: '담당자가 신청내용 확인 후 승인이 되면\n해당 시간에 미팅이 진행됩니다.',
+                            position: 'center',
+                            showConfirmButton: true,
+                            icon: 'success',
+                        }
+                        Swal2.fire(options).then(function (value) {
+                            if (value) {
+                                getTimeTables(formData.meeting_date);
+                                $('#modal-default').modal('hide');
+                            }
+                        });
+                    },
+                    complete: function () {
+                        refreshToken();
+                    }
+                });
+
+            });
+        });
+</script>
+<script id="template-expo-intro" type="text/x-handlebars-template">
+    <div class="tab-pane-slider"></div>
+    <div class="row">
+        <div class="col-6">
+            <img src="/storage/{{expo_image_url}}" class="img img-fluid">
+        </div>
+        <div class="col-6">
+            <h2 class="title mt-0"> {{expo_name}} </h2>
+            <p class="text">모집기간 {{expo_recruit_start_date}}
+                ~ {{expo_recruit_end_date}}</p>
+            <p class="text">개최기간 {{expo_open_date}}
+                ~ {{expo_close_date}}</p>
+            <p class="text">{{nl2br expo_description}}</p>
+        </div>
+        {{#each expo_attach}}
+            <div class="col-12">
+                <img src="/storage/{{url}}" class="img img-fluid">
+            </div>
+        {{/each}}
+    </div>
+
+</script>
+<script id="template-expo-booth" type="text/x-handlebars-template">
+    <div class="info text-center not-found d-none">
+        <div class="icon">
+            <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                <i class="material-icons">search_off</i>
+            </button>
+        </div>
+        <h4 class="info-title">부스 준비 중입니다.</h4>
+    </div>
+    <div id="data-container-booth" style="min-height:732px;">
+    </div>
+    <div id="pagination-grid-booth"></div>
+</script>
+<script id="template-expo-booth-item" type="text/x-handlebars-template">
+    <div class="row">
+        {{#each data}}
+            <div class="col-3 card-item">
+                <div class="card card-profile card-plain card-search-booth"
+                     style="padding: 5px 5px;border: 1px #e2e2e2 solid;">
+                    <a href="#" data-toggle="modal"
+                       id="booth_{{id}}"
+                       data-booth-id="{{id}}"
+                       class="open-booth">
+
+                        <img class="img"
+                             src="/storage/{{booth_image_url}}"
+                             style="width:150px;height:150px;border: 1px #e2e2e2 solid;">
+                    </a>
+                    <div class="card-body">
+                        <a href="#" data-toggle="modal"
+                           id="booth_{{id}}"
+                           data-booth-id="{{id}}"
+                           class="open-booth">
+                            <h4 class="card-title mt-0 text-break m-0 card-item__title"
+                                style="height:64px;">{{booth_title}}</h4>
+                            <p class="text text-right">{{companyBooth.company_name}}</p>
+                        </a>
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-black btn-fab btn-round btn-favorite"
+                            data-id="{{id}}"
+                            data-favorite="booth"
+                            data-toggle="tooltip" title="즐겨찾기"
+                            style="z-index: 2;">
+                            <i class="material-icons {{#if (isFavorite 'booth' id)}}text-warning{{/if}}">star</i>
+                        </button>
+                        <span class="badge badge-danger badge-live"
+                              style="display:none;">Live</span>
+                    </div>
+
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</script>
+<script id="template-expo-product" type="text/x-handlebars-template">
+    <div id="data-container-product-detail"></div>
+    <input type="hidden" name="searchstr">
+    <input type="hidden" name="searchid">
+    <div class="info text-center not-found d-none">
+        <div class="icon">
+            <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                <i class="material-icons">search_off</i>
+            </button>
+        </div>
+        <h4 class="info-title">전시상품 준비 중입니다.</h4>
+    </div>
+    <div id="data-container-product">
+    </div>
+    <div id="pagination-grid-product"></div>
+</script>
+<script id="template-expo-product-detail" type="text/x-handlebars-template">
+    <button type="button" class="btn btn-sm btn-black btn-back-list">목록으로</button>
+    <div class="row">
+        <div class="col-6">
+            <div id="product-slider">
+                <div class="slider-for">
+                    {{#each previews}}
+                        <div>
+                            <img src="/storage/{{this}}" alt="" class="img img-fluid">
+                        </div>
+                    {{/each}}
+                </div>
+                <div class="slider-nav">
+                    {{#each previews}}
+                        <div>
+                            <img src="/storage/{{this}}" alt="" class="img img-fluid" style="width:100px;height:100px;">
+                        </div>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <h3>
+                {{prd_title}}
+                <button
+                    type="button"
+                    class="btn btn-sm btn-black btn-fab btn-round btn-favorite"
+                    data-id="{{id}}"
+                    data-favorite="product"
+                    data-toggle="tooltip" title="즐겨찾기"
+                    style="z-index: 2;">
+                    <i class="material-icons {{#if (isFavorite 'product' id)}}text-warning{{/if}}">favorite</i>
+                </button>
+
+            </h3>
+            {{#if (isEqual prd_viewprice 'Y')}}
+                <p class="card-text m-0 p-0"><strike>{{numberformat prd_org_price}}원</strike> {{prd_price_percent}}%</p>
+                <p class="card-text m-0 p-0">{{numberformat prd_price}}원</p>
+            {{else}}
+                <p class="card-text m-0 p-0">가격문의</p>
+            {{/if}}
+            <a href="{{prd_url}}" target="_blank" class="btn btn-black">웹페이지에서 보기</a>
+        </div>
+    </div>
+    {{#if (gt prd_desc_img.length 0)}}
+        <h4>상품 정보</h4>
+        {{#each prd_desc_img}}
+            <div>
+                <img src="/storage/{{url}}" alt="" class="img img-fluid">
+            </div>
+        {{/each}}
+    {{/if}}
+    <button type="button" class="btn btn-sm btn-black btn-back-list">목록으로</button>
+</script>
+<script id="template-expo-product-detail-modal" type="text/x-handlebars-template">
+    <div class="modal-dialog modal-lg product-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="btn btn-sm btn-black btn-fab btn-round" data-dismiss="modal" aria-label="Close">
+                    <i class="material-icons" aria-hidden="true">close</i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-6">
+                        <div id="product-slider">
+                            <div class="slider-for">
+                                {{#each previews}}
+                                    <div>
+                                        <img src="/storage/{{this}}" alt="" class="img img-fluid">
+                                    </div>
+                                {{/each}}
+                            </div>
+                            <div class="slider-nav">
+                                {{#each previews}}
+                                    <div>
+                                        <img src="/storage/{{this}}" alt="" class="img img-fluid"
+                                             style="width:100px;height:100px;">
+                                    </div>
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <h3>
+                            {{prd_title}}
+                            <button
+                                type="button"
+                                class="btn btn-sm btn-black btn-fab btn-round btn-favorite"
+                                data-id="{{id}}"
+                                data-favorite="product"
+                                data-toggle="tooltip" title="즐겨찾기"
+                                style="z-index: 2;">
+                                <i class="material-icons {{#if
+                                    (isFavorite 'product' id)}}text-warning{{/if}}">favorite</i>
+                            </button>
+
+                        </h3>
+                        {{#if (isEqual prd_viewprice 'Y')}}
+                            <p class="card-text m-0 p-0"><strike>{{numberformat prd_org_price}}
+                                원</strike> {{prd_price_percent}}%</p>
+                            <p class="card-text m-0 p-0">{{prd_price}}원</p>
+                        {{else}}
+                            <p class="card-text m-0 p-0">가격문의</p>
+                        {{/if}}
+                        <a href="{{prd_url}}" class="btn btn-black">웹페이지에서 보기</a>
+                    </div>
+                </div>
+                <h4>상품 정보</h4>
+                {{#each prd_desc_img}}
+                    <div>
+                        <img src="/storage/{{url}}" alt="" class="img img-fluid">
+                    </div>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</script>
+<script id="template-expo-product-item" type="text/x-handlebars-template">
+    <div class="row">
+        {{#each data}}
+            <div class="col-3" id="booth_product_{{id}}">
+                <div class="card position-relative" style="width:100px;height:100px;">
+                    <a href="#" role="button" class="btn-product" data-id="{{id}}" data-booth="{{booth_id}}">
+                        <img alt="{{prd_title}}" class="card-img-top img img-fluid" src="/storage/{{prd_img1}}"
+                             style="width:100px;height:100px;">
+                    </a>
+                </div>
+                <div class="card-body p-0" style="min-height:85px;">
+                    <a role="button" class="btn-product" data-id="{{id}}">
+                        <h4 class="card-title m-0 pt-1 pl-2 pr-2">{{prd_title}}</h4>
+                        {{#if (isEqual prd_viewprice 'Y')}}
+                            <p class="card-text m-0 p-0"><strike>{{numberformat prd_org_price}}
+                                원</strike> {{prd_price_percent}}%</p>
+                            <p class="card-text m-0 p-0">{{numberformat prd_price}}원</p>
+                        {{else}}
+                            <p class="card-text m-0 p-0">가격문의</p>
+                        {{/if}}
+                    </a>
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-black btn-fab btn-round btn-favorite"
+                        data-id="{{id}}"
+                        data-favorite="product"
+                        data-toggle="tooltip" title="즐겨찾기"
+                        style="z-index: 2;">
+                        <i class="material-icons {{#if (isFavorite 'product' id)}}text-warning{{/if}}">favorite</i>
+                    </button>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+
+</script>
+<script id="template-ad-banner" type="text/x-handlebars-template">
+    {{#each data}}
+        <div class="carousel-item active">
+            <a href="{{url}}"
+                {{#if (isEqual banner_class '_blank')}}
+               target="_blank"
+                {{/if}}
+               class="link" style="width:100%">
+                <img class="img w-100"
+                     src="/storage/{{image_url}}"
+                     alt="" style="">
+            </a>
+        </div>
+    {{/each}}
+</script>
+<script id="template-product-slider" type="text/x-handlebars-template">
+</script>
+<script id="template-expo-booth-contact-agree" type="text/x-handlebars-template">
+</script>
+<script id="template-expo-booth-contact" type="text/x-handlebars-template">
+
+</script>

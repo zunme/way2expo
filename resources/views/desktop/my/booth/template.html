@@ -1,0 +1,421 @@
+<script id="editpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <form name="booth-save" method="post" action="" class="m-0">
+            {{#if (checknotempty booth.id) }}
+                <input type="hidden" name="id" value="{{booth.id}}">
+                <input type="hidden" name="expo_id" value="{{booth.expo_id}}">
+            {{/if}}
+            <div class="modal-header">
+                <h5 class="title modal-title m-0" id="bizForm">
+                {{#if (checkempty booth.id) }}
+                    부스 <span class="badge badge-info">신규</span>
+                {{else}}
+                    [{{booth.expo_booth.expo_name}}] 부스 <span class="badge badge-warning">수정</span>
+                {{/if}}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body pt-0">
+                <h4 class="form-title">박람회 선택</h4>
+                <div class="form-group">
+                    {{#if (checkempty booth.id) }}
+                        <select class="form-control select2" name="expo_id" id="select-expo" data-style="btn btn-link">
+                            <option value=""></option>
+                            {{#each expo_list}}
+                                {{#if this.recruiting}}
+                                    <option value="{{ this.id }}">{{ this.expo_name }}</option>
+                                {{else}}
+                                    <option value="{{ this.id }}" disabled="true">{{ this.expo_name }}</option>
+                                {{/if}}
+                            {{/each}}
+                        </select>
+                    {{else}}
+                        <input type="text" class="form-control" value="{{booth.expo_booth.expo_name}}" disabled="true">
+                    {{/if}}
+                </div>
+
+                <!--<div class="input-group">
+                    <input type="text" class="form-control" placeholder="검색어를 입력해주세요.">
+                    <div class="input-group-append">
+                        <button class="btn btn-sm btn-black btn-search" type="button" onclick="searchExpo();">
+                            <i class="material-icons">search</i>
+                        </button>
+                    </div>
+                </div>
+                -->
+
+                <h4 class="form-title">부스 기본 정보</h4>
+                <div class="form-group">
+                    <label>부스 타이틀</label>
+                    <input type="text" name="booth_title" class="form-control"
+                           placeholder="제목을 입력해주세요(최대 50자)" value="{{booth.booth_title}}">
+                </div>
+                <div class="form-group">
+                    <label>부스 소개</label>
+                    <textarea class="form-control" name="booth_intro" rows="3"
+                              placeholder="부스소개를 작성해 주세요.&#13;&#10;(최대 1,000자)">{{booth.booth_intro}}</textarea>
+                </div>
+                <div class="form-group p-0">
+                    <div class="row">
+                        <div class="col-4">
+                            <input type="text" name="tags[]" class="form-control" placeholder="태그1"
+                                   value="{{booth.tags.0.name}}">
+                        </div>
+                        <div class="col-4">
+                            <input type="text" name="tags[]" class="form-control" placeholder="태그2"
+                                   value="{{booth.tags.1.name}}">
+                        </div>
+                        <div class="col-4">
+                            <input type="text" name="tags[]" class="form-control" placeholder="태그3"
+                                   value="{{booth.tags.2.name}}">
+                        </div>
+                    </div>
+                </div>
+                <h4 class="form-title">동영상</h4>
+                <input type="hidden" name="booth_movtype" value="">
+                <div class="form-group">
+                    <ul class="nav nav-pills nav-pills-black p-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-sm active" data-toggle="tab"
+                               data-type="false" href="#booth_movtype1"
+                               role="tablist" aria-expanded="true">
+                                Off
+                            </a>
+                        </li>
+                        <!--
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-sm" data-toggle="tab" data-type="mp4"
+                               href="#booth_movtype2"
+                               role="tablist" aria-expanded="false">
+                                동영상 업로드
+                            </a>
+                        </li>
+                        -->
+                        <li class="nav-item">
+                            <a class="nav-link nav-link-sm" data-toggle="tab" data-type="youtube"
+                               href="#booth_movtype3"
+                               role="tablist" aria-expanded="false">
+                                YouTube 동영상<i class="fa fa-youtube-play"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="booth_movtype1" aria-expanded="false">
+                    </div>
+                    <div class="tab-pane" id="booth_movtype2" aria-expanded="false">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group form-file-upload form-file-simple">
+                                    <label>사용자 동영상 업로드</label>
+                                    <input type="text" name="booth_mp4_url"
+                                           class="form-control inputFileVisible"
+                                           placeholder="동영상 업로드">
+                                    <input type="file" name="booth_youtube_url"
+                                           class="inputFileHidden"
+                                           accept="image/x-png,image/gif,image/jpeg"
+                                           data-target="imgInp_target_pc">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="booth_movtype3" aria-expanded="false">
+                        <div class="row p-0">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label>YouTube 동영상</label>
+                                    <input type="text" name="booth_youtube_url" class="form-control"
+                                           placeholder="https://youtu.be/xxxxxxx">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="form-title">이미지 첨부</h4>
+                <div class="row">
+                    <div class="col-6 text-center">
+                        <div class="form-group d-inline-block">
+                            <label>PC용 사진</label>
+                            {{#if (checkempty booth.id) }}
+                                <div id="image-preview-pc" class="image-preview">
+                                    <label for="image-upload-pc" id="image-label-pc">PC 이미지 업로드</label>
+                                    <input type="file" name="selectimg_pc" id="image-upload-pc"
+                                           accept="image/x-png,image/gif,image/jpeg"
+                                    />
+                                </div>
+                            {{else}}
+                                <div id="image-preview-pc" class="image-preview"
+                                    {{#if (checknotempty booth.booth_image_url) }}
+                                     style="background-image: url('{{ booth.booth_image_url }}');
+                                         background-size: contain; background-position: center center;"
+                                    {{/if}}
+                                >
+                                    <label for="image-upload-pc" id="image-label-pc">
+                                        {{#if (checkempty booth.booth_image_url) }}PC 이미지 업로드
+                                        {{else}}변경
+                                        {{/if}}
+                                    </label>
+
+                                    <input type="file" name="selectimg_pc" id="image-upload-pc"
+                                           accept="image/x-png,image/gif,image/jpeg">
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                    <div class="col-6 text-center">
+                        <div class="form-group d-inline-block">
+                            <label>모바일용 사진</label>
+                            {{#if (checkempty booth.id) }}
+                                <div id="image-preview-mobile" class="image-preview">
+                                    <label for="image-upload-mobile" id="image-label-mobile">모바일 이미지 업로드</label>
+                                    <input type="file" name="selectimg_mobile" id="image-upload-mobile"
+                                           accept="image/x-png,image/gif,image/jpeg"
+                                    />
+                                </div>
+                            {{else}}
+                                <div id="image-preview-mobile" class="image-preview"
+                                    {{#if (checknotempty booth.booth_mobile_image_url) }}
+                                     style="background-image: url('{{ booth.booth_mobile_image_url }}');
+                                         background-size: contain; background-position: center center;"
+                                    {{/if}}
+                                >
+                                    <label for="image-upload-mobile" id="image-label-mobile">
+                                        {{#if (checkempty booth.booth_mobile_image_url) }}모바일 이미지 업로드
+                                        {{else}}변경
+                                        {{/if}}
+                                    </label>
+                                    <input type="file" name="selectimg_mobile" id="image-upload-mobile"
+                                           accept="image/x-png,image/gif,image/jpeg">
+                                </div>
+                            {{/if}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                {{#if (checkempty booth.id) }}
+                    <button type="submit" class="btn btn-sm btn-info btn-block btn-ajax">부스 만들기</button>
+                {{else}}
+                    <button type="submit" class="btn btn-sm btn-warning btn-block btn-ajax">수정</button>
+                {{/if}}
+
+
+                <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        $(function () {
+            /* Booth */
+            $.uploadPreview({
+                input_field: "#image-upload-pc",   // Default: .image-upload
+                preview_box: "#image-preview-pc",  // Default: .image-preview
+                label_field: "#image-label-pc",    // Default: .image-label
+                label_selected: "변경",  // Default: Change File
+                success_callback: function () {
+
+                },
+            });
+
+            $.uploadPreview({
+                input_field: "#image-upload-mobile",   // Default: .image-upload
+                preview_box: "#image-preview-mobile",  // Default: .image-preview
+                label_field: "#image-label-mobile",    // Default: .image-label
+                label_selected: "변경",  // Default: Change File
+                success_callback: function () {
+
+                },
+            });
+            var expo_select = $.map(expo_list, function (obj) {
+                obj.id = obj.id || obj.pk;
+                obj.text = obj.expo_name;
+                obj.html = `<div class="d-flex justify-content-between">${obj.text} <small style="color:inherit">개최 : ${obj.expo_open_date} ~ ${obj.expo_close_date}</small></div>`;
+
+                return obj;
+            });
+            $("#select-expo").select2({
+                width: "100%",
+                language: "ko",
+                data: expo_select,
+                placeholder: "박람회 선택을 해주세요.",
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                templateResult: function (data) {
+                    return data.html;
+                },
+                templateSelection: function (data) {
+                    return data.text;
+                }
+
+            });
+            var saveForm = $('form[name=booth-save]');
+            saveForm.find("button[type=submit]").click(function (e) {
+                e.preventDefault();
+                var button = $(this);
+                var formData = new FormData(saveForm[0]);
+                $.ajax({
+                    type: 'POST',
+                    url: "/my/booth/save",
+                    dataType: "JSON",
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (res) {
+                        if (res.result === 'OK') {
+                            Swal2.fire({
+                                text: res.msg,
+                                icon: 'success',
+                                showConfirmButton: true,
+                            }).then(function(){
+                                $('#modal-lg').on('hidden.bs.modal', function () {
+                                    window.location.reload();
+                                })
+                                $('#modal-lg').modal('hide');
+                            });
+                        } else {
+                            Swal2.fire({
+                                text: res.msg,
+                                icon: 'error',
+                                showConfirmButton: true,
+                            });
+                        }
+
+                    },
+                });
+            });
+            $('input[name=booth_youtube_url]').on('keyup', function () {
+                $('input[name=booth_movtype]').each(function () {
+                    if ($(this).val() === 'youtube')
+                        $(this).prop('checked', true);
+                });
+            });
+            $('input[name=booth_movtype]').change(function () {
+                if ($(this).val() === null || $(this).val() === '') {
+                    $('input[name=booth_youtube_url]').val('');
+                    previewYoutube();
+                }
+            });
+
+        })
+</script>
+<script id="boothpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="page-header header-filter booth-header" data-parallax="false"
+             style="background-image: url('/storage/{{booth.booth_image_url}}');">
+            <div class="container">
+                <p class="booth-title-expo m-0">
+                    {{expo.expo_name}}
+                </p>
+                <h2 class="title m-0">{{booth.booth_title}}</h2>
+                {{#if (checknotempty booth.booth_youtube_url)}}
+                    <div class="youtube-play-btn2">
+                        <a href="{{booth.booth_youtube_url}}" target="_blank" role="button"" class="btn btn-social
+                        btn-fill btn-youtube" style="text-transform:inherit;">
+                        <i class="fa fa-youtube-play" style="margin-top: -1.14em;"></i> YouTube
+                        </a>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+        <div class="modal-body">
+            <div class="row justify-content-center">
+                <ul class="nav nav-pills nav-pills-black booth-tabs p-0" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#booth-tab1" role="tab"
+                           aria-expanded="true">
+                            소개
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-content tab-space">
+                <div class="tab-pane active" role="tabpanel" id="booth-tab1" aria-expanded="true">
+                    <h4 class="title mb-0 mt-2">부스 이미지</h4>
+                    <hr>
+                    <img src="/storage/{{ booth.booth_image_url }}" class="img img-fluid booth-image" alt="">
+                    <div class="section p-3 booth-description">
+                        <p>{{ booth.booth_intro }}</p>
+                    </div>
+                    {{#if (gt booth.booth_attach.length 0 )}}
+                        <h4 class="title mb-0 mt-2">상세</h4>
+                        <hr>
+                        {{#each booth.booth_attach}}
+                            <img src="/storage/{{ url }}" class="img img-fluid booth-image" alt="">
+                        {{/each}}
+                    {{/if}}
+                    <h4 class="title mb-0">회사 소개</h4>
+                    <hr>
+
+                    <ul>
+                        <li class="">{{ booth.company_booth.company_name }}</li>
+                        {{#if (checknotempty booth.company_booth.company_image_url)}}
+                            <li class=""><img src="/storage/{{ booth.company_booth.company_image_url }}" class="img img-fluid" alt=""></li>
+                        {{/if}}
+                        <li class="">{{ booth.company_booth.company_url }}</li>
+                        <li class="">{{ booth.company_booth.company_email }}</li>
+                        <li class="">{{ booth.company_booth.company_tel1 }}</li>
+                        <li class="">{{ booth.company_booth.company_info1 }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm btn-secondary" onclick="history.back(-1);">닫기</button>
+        </div>
+    </div>
+    <script>
+        var booth_id = {{booth.id}};
+
+        $(function () {
+        });
+
+</script>
+<script id="guidePop" type="text/x-handlebars-template">
+    <div class="row">
+        <div class="col-12 ml-auto mr-auto">
+            <form name="agreeForm" method="get">
+                <div class="card mt-0 mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">Live 방송안내</h4>
+                        <h6 class="card-subtitle mb-2 text-muted">라이브방송은 Way2EXPO 의 회원 및 기업회원과 함께 소통을 할 수있는 새로운 만남의장입니다.<br>다음과
+                            같은 준비와 규칙을 준수하여 방송을 해주시길 바랍니다.</h6>
+                        <div class="card m-0 mt-2 mb-2 {{($has_live)?'bg-danger':'bg-info'}}">
+                            <div class="card-body p-0 pt-2 pb-2 pl-3">
+                                <span class="text">현재 방송 상태 : {{($has_live)?'진행 불가':'진행 가능'}}</span>
+                            </div>
+                        </div>
+                        <p class="card-text mt-4">1. 방송장비 체크<br>방송에 필요한 노트북, 휴대폰 등의 기능을 점검해 주시길 바랍니다.</p>
+                        <p class="card-text">2. 방송규정</p>
+                        <textarea class="form-control" rows="8" readonly>• 기본규정
+방송시작 버튼 클릭 시 바로 방송이 송출됩니다.
+박람회 중 오전 10시 부터 오후 5시 사이까지 원하시는 시각에 방송이 가능합니다.
+방송 중 비속어 및 욕설 등을 자제해 주시기 바랍니다.
+방송 중 부적절한 언행 및 영상 송출 시 사전 알림없이 강제로 방송이 종료 될 수 있습니다.
+
+• 방송책임
+소통 중 발생한 모든사항 등은 방송 당사자 및 시청자 간의 책임이 있으며, Way2EXPO 와 관련이 없음을 확인합니다.</textarea>
+                        <div class="form-group form-check text-right">
+                            <label class="form-check-label text-dark">
+                                <input class="form-check-input" type="checkbox" name="agree"
+                                       id="inlineCheckbox1">동의합니다.
+                                <span class="form-check-sign"><span class="check"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-black float-right">방송 시작</button>
+            </form>
+        </div>
+
+    </div>
+</script>

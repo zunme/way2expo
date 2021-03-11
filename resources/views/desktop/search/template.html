@@ -1,0 +1,204 @@
+<script id="search-template" type="text/x-handlebars-template">
+    <div class="tab-content tab-space pt-4">
+        <div class="tab-pane active" id="result-all" aria-expanded="true">
+            <section>
+                <div id="data-container-all"></div>
+            </section>
+        </div>
+        <div class="tab-pane" id="result-expo" aria-expanded="true">
+            <section>
+                <h4 class="form-title mt-4">박람회 (<span class="count-text-expo"></span>)</h4>
+                <div class="info text-center not-found d-none">
+                    <div class="icon">
+                        <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                            <i class="material-icons">search_off</i>
+                        </button>
+                    </div>
+                    <h4 class="info-title">검색결과가 없습니다.</h4>
+                </div>
+                <div id="data-container-expo"></div>
+                <div id="pagination-grid-expo"></div>
+            </section>
+        </div>
+        <div class="tab-pane" id="result-booth" aria-expanded="true">
+            <section>
+                <h4 class="form-title mt-4">부스 (<span class="count-text-booth"></span>)</h4>
+                <div class="info text-center not-found d-none">
+                    <div class="icon">
+                        <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                            <i class="material-icons">search_off</i>
+                        </button>
+                    </div>
+                    <h4 class="info-title">검색결과가 없습니다.</h4>
+                </div>
+                <div id="data-container-booth"></div>
+                <div id="pagination-grid-booth"></div>
+            </section>
+        </div>
+        <div class="tab-pane" id="result-product" aria-expanded="true">
+            <section>
+                <h4 class="form-title mt-4">전시상품 (<span class="count-text-product"></span>)</h4>
+                <div class="info text-center not-found d-none">
+                    <div class="icon">
+                        <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                            <i class="material-icons">search_off</i>
+                        </button>
+                    </div>
+                    <h4 class="info-title">검색결과가 없습니다.</h4>
+                </div>
+                <div id="data-container-product"></div>
+                <div id="pagination-grid-product"></div>
+            </section>
+        </div>
+    </div>
+</script>
+<script id="template-result-all" type="text/x-handlebars-template">
+    <section>
+        <h4 class="form-title mt-4">박람회 (<span class="count-text-expo"></span>)</h4>
+        <div class="info text-center not-found-expo d-none">
+            <div class="icon">
+                <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                    <i class="material-icons">search_off</i>
+                </button>
+            </div>
+            <h4 class="info-title">검색결과가 없습니다.</h4>
+        </div>
+        <div id="data-container-all-expo"></div>
+
+        <h4 class="form-title mt-4">부스 (<span class="count-text-booth"></span>)</h4>
+        <div class="info text-center not-found-booth d-none">
+            <div class="icon">
+                <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                    <i class="material-icons">search_off</i>
+                </button>
+            </div>
+            <h4 class="info-title">검색결과가 없습니다.</h4>
+        </div>
+        <div id="data-container-all-booth"></div>
+
+        <h4 class="form-title mt-4">전시상품 (<span class="count-text-product"></span>)</h4>
+        <div class="info text-center not-found-product d-none">
+            <div class="icon">
+                <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                    <i class="material-icons">search_off</i>
+                </button>
+            </div>
+            <h4 class="info-title">검색결과가 없습니다.</h4>
+        </div>
+        <div id="data-container-all-product"></div>
+    </section>
+</script>
+<script id="template-result-expo" type="text/x-handlebars-template">
+    <div class="row" style="min-height:413px;">
+        {{#each expo}}
+            <div class="col-3 p-3">
+                <div class="card position-relative" style="width:250px;height:250px;">
+                    <a href="/expo/{{expo_code}}">
+                        <img alt="{{expo_name}}" class="card-img-top img img-fluid" src="/storage/{{expo_image_url}}"
+                             style="width:250px;height:250px;">
+                    </a>
+                </div>
+                <button class="btn btn-sm btn-black btn-fab btn-round btn-favorite" data-id="{{id}}" data-favorite="expo"
+                        data-toggle="tooltip" title="즐겨찾기">
+                    <i class="material-icons {{#if (isFavorite 'expo' id)}}text-warning{{/if}}">star</i>
+                </button>
+
+                <a href="/expo/{{expo_code}}">
+                    <div class="card-body p-0" style="min-height:85px;">
+                        <p class="card-text m-0 pl-2 pr-2"> {{getDateStatus expo_open_date expo_close_date}}</p>
+                        <h4 class="card-title m-0 pt-1 pl-2 pr-2">{{expo_name}}</h4>
+                        <p class="card-text m-0 pl-2 pr-2">
+                            <small>{{expo_open_date}}
+                                ~ {{expo_close_date}}</small>
+                        </p>
+                    </div>
+                </a>
+            </div>
+        {{/each}}
+    </div>
+</script>
+<script id="template-result-booth" type="text/x-handlebars-template">
+    <div class="row">
+        {{#each booth}}
+            <div class="col-6">
+                <div class="card card-profile card-plain card-search-booth">
+                    <div class="row position-relative">
+                        <div class="col-auto">
+                            <div class="card-header card-header-image">
+                                <a href="/expo/{{expo_code}}/{{id}}">
+                                    <img class="img" src="/storage/{{booth_image_url}}"
+                                         style="width:170px;height:170px;">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-7 position-static">
+                            {{#if (isFavoriteAvailable expo_open_date)}}
+                            <button class="btn btn-sm btn-black btn-fab btn-round btn-favorite" data-id="{{id}}" data-favorite="booth"
+                                    data-toggle="tooltip" title="즐겨찾기">
+                                <i class="material-icons {{#if (isFavorite 'booth' id)}}text-warning{{/if}}">star</i>
+                            </button>
+                            {{/if}}
+                            <a href="/expo/{{expo_code}}/{{id}}">
+                                <div class="card-body p-0">
+                                    <h4 class="card-title mt-0">{{ booth_title }}</h4>
+                                    <h5 class="card-category text-muted mb-0">{{expo_name}}</h5>
+                                    <p class="card-description m-0">
+                                        {{dateformat expo_open_date 'Y-MM-DD'}} ~ {{dateformat expo_close_date 'Y-MM-DD'}}
+                                    </p>
+                                    {{#each tags}}
+                                        <span>#{{name}}</span>
+                                    {{/each}}
+                                </div>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</script>
+<script id="template-result-product" type="text/x-handlebars-template">
+    <div class="row" style="min-height:413px;">
+        {{#each product}}
+            <div class="col-3 p-3">
+                <div class="card position-relative" style="width:250px;height:250px;">
+                    <a href="/expo/{{expo_code}}/{{booth_id}}#product_{{id}}">
+                        <img alt="{{prd_title}}" class="card-img-top img img-fluid" src="/storage/{{prd_img1}}"
+                             style="width:250px;height:250px;">
+                    </a>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <h4 class="card-title m-0 pt-1 pl-2 pr-2">{{prd_title}}</h4>
+                    {{#if (isFavoriteAvailable expo_open_date)}}
+                        <button class="btn btn-sm btn-black btn-fab btn-round btn-favorite" data-id="{{id}}" data-favorite="product"
+                                data-toggle="tooltip" title="즐겨찾기">
+                            <i class="material-icons {{#if (isFavorite 'product' id)}}text-danger{{/if}}">favorite</i>
+                        </button>
+                    {{/if}}
+                </div>
+                <a href="/expo/{{expo_code}}/{{booth_id}}/product/{{id}}">
+                    <div class="card-body p-0" style="min-height:85px;">
+                        {{#if (isEqual prd_viewprice 'Y')}}
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex">
+                                    {{prd_price_percent}}%
+                                </div>
+                                <div class="d-flex">
+                                    <p class="card-text m-0 p-0"><strike>{{numberformat prd_org_price}}원</strike></p>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <p class="card-text m-0 p-0">{{numberformat prd_price}}원</p>
+                            </div>
+                        {{else}}
+                            <div class="d-flex justify-content-end">
+                                <p class="card-text m-0 p-0">가격문의</p>
+                            </div>
+                        {{/if}}
+                    </div>
+                </a>
+            </div>
+        {{/each}}
+    </div>
+</script>

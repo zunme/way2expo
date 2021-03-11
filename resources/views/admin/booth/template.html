@@ -1,0 +1,533 @@
+<script id="editpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <form name="booth-save" method="post" action="/admin/booth-save">
+            <input type="hidden" name="id" value="{{id}}">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{#if (checkempty company_booth.company_name) }}
+                        <span class="badge badge-info">신규</span>
+                    {{else}}
+                        {{expo_booth.expo_name}} / {{company_booth.company_name}} / {{booth_title}}
+                        <span class="badge badge-warning">수정</span>
+                    {{/if}}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <section class="section">
+                    <div class="section-title m-0">박람회 & 기업 선택</div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>박람회 <code><i class="fas fa-check"></i></code></label>
+                                <select name="expo_id" class="form-control select2" id="select-expo">
+                                    <option value="{{expo_id}}">{{#if (checkempty expo_booth.expo_name) }}
+                                        박람회 선택을 해주세요.{{else}}{{expo_booth.expo_name}}{{/if}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>기업 <code><i class="fas fa-check"></i></code></label>
+                                <select name="company_id" class="form-control select2" id="select-company">
+                                    <option value="{{company_id}}">{{#if (checkempty company_booth.company_name)}}
+                                        기업 선택을 해주세요.{{else}}{{company_booth.company_name}}{{/if}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-title m-0">부스 기본 정보</div>
+                    <div class="form-group">
+                        <label>부스 타이틀 <code><i class="fas fa-check"></i></code></label>
+                        <input type="text" name="booth_title" class="form-control"
+                               placeholder="제목을 입력해주세요(최대 50자)" value="{{booth_title}}">
+                    </div>
+                    <div class="form-group">
+                        <label>부스 소개 <code><i class="fas fa-check"></i></code></label>
+                        <textarea class="form-control" name="booth_intro" rows="3"
+                                  placeholder="부스소개를 작성해 주세요.&#13;&#10;(최대 1,000자)"
+                                  style="height:100px;">{{booth_intro}}</textarea>
+                    </div>
+                    <div class="form-group p-0">
+                        <label>부스 검색 태그</label>
+                        <div class="row">
+                            <div class="col-4">
+                                <input type="text" name="tags[]" class="form-control" placeholder="태그1"
+                                       value="{{tags.0.name}}">
+                            </div>
+                            <div class="col-4">
+                                <input type="text" name="tags[]" class="form-control" placeholder="태그2"
+                                       value="{{tags.1.name}}">
+                            </div>
+                            <div class="col-4">
+                                <input type="text" name="tags[]" class="form-control" placeholder="태그3"
+                                       value="{{tags.2.name}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-title m-0">부스 이미지</div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group mb-1">
+                                <label>PC용 사진 <code><i class="fas fa-check"></i></code></label>
+                                <input type="file" class="form-control" name="selectimg_pc" class="inputFileHidden"
+                                       accept="image/x-png,image/gif,image/jpeg"
+                                       data-target="imgInp_target_pc"
+                                       onchange="updatePhotoPreview(this);"
+                                >
+                                <div class="invalid-feedback d-block">
+                                    이미지 업로드 제한 문구
+                                </div>
+                                <div id="imgInp_target_pc">
+                                    <img src="{{booth_image_url}}" class="imgInp-new-img inboximg img-fluid"
+                                         style="{{#if (checkempty booth_image_url) }}display:none;{{/if}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>모바일용 사진 <code><i class="fas fa-check"></i></code></label>
+                                <input type="file" class="form-control" name="selectimg_mobile" class="inputFileHidden"
+                                       accept="image/x-png,image/gif,image/jpeg"
+                                       data-target="imgInp_target_mobile"
+                                       onchange="updatePhotoPreview(this);"
+                                >
+                                <div class="invalid-feedback d-block">
+                                    이미지 업로드 제한 문구
+                                </div>
+                                <div id="imgInp_target_mobile">
+                                    <img src="{{booth_mobile_image_url}}" class="imgInp-new-img inboximg img-fluid"
+                                         style="{{#if (checkempty booth_mobile_image_url) }}display:none;{{/if}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>부스 상세 사진</label>
+                                <div>
+                                    <label for="image-upload"
+                                           class="btn btn-sm btn-icon btn-info btn-block text-white"
+                                           style="cursor:pointer">
+                                        <i class="fas fa-plus"></i> 사진 추가
+                                    </label>
+                                    <input type="file" class="d-none" id="image-upload"
+                                           accept="image/x-png,image/gif,image/jpeg" multiple
+                                           onchange="addDetailImage(this)">
+
+                                    <ul class="list-group sortable">
+                                        {{#if (checknotempty booth_attach)}}
+                                            {{#each booth_attach}}
+                                                <li class="list-group-item handle" data-id="{{json this}}">
+                                                    <div class="row justify-content-between mb-2">
+                                                        <div class="col ml-auto mr-auto pr-1">
+                                                            <button type="button"
+                                                                    class="btn btn-sm btn-icon btn-outline-danger btn-block text-left">
+                                                                <i class="fas fa-arrows-alt-v"></i>
+                                                                드래그&드랍 하여 순서 변경
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-auto text-right pl-0">
+                                                            <button type="button"
+                                                                    class="btn btn-sm btn-icon btn-outline-danger"
+                                                                    onclick="removeDetailImageItem(this)"><i
+                                                                class="fas fa-trash"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    <label class="imagecheck">
+                                                        <div class="image-preview m-0">
+                                                            <img src="/storage/{{url}}" class="img img-fluid" alt="">
+                                                        </div>
+                                                    </label>
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-block btn-light detail-more"
+                                                            onclick="moreDetailImage(this)">펼치기
+                                                    </button>
+                                                </li>
+                                            {{/each}}
+                                        {{/if}}
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-title m-0">부스 영상</div>
+                    <div class="form-group">
+                        <label>동영상</label>
+                        <div class="custom-switches-stacked mt-2">
+                            <label class="custom-switch pl-0">
+                                <input type="radio" name="booth_movtype" value="" class="custom-switch-input"
+                                       {{#if (checkempty booth_movtype) }}checked{{/if}}>
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">없음</span>
+                            </label>
+                            <!--
+                            <label class="custom-switch pl-0">
+                                <input type="radio" name="booth_movtype" value="mp4" class="custom-switch-input"
+                                       {{#if (isEqual 'mp4' booth_movtype) }}checked{{/if}}>
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">동영상 업로드</span>
+                                <input type="file" name="booth_mp4_url" class="form-control ml-3 p-0"
+                                       style="width:20rem;height:32px;">
+                            </label>
+                            -->
+                            <label class="custom-switch pl-0">
+                                <input type="radio" name="booth_movtype" value="youtube" class="custom-switch-input"
+                                       {{#if (isEqual 'youtube' booth_movtype) }}checked{{/if}}>
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">YouTube 동영상</span>
+                                <div class="input-group input-group-sm ml-3" style="width:25rem;">
+                                    <input type="text" name="booth_youtube_url" class="form-control form-control-sm"
+                                           placeholder="" aria-label=""
+                                           value="{{booth_youtube_url}}">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-light btn-icon" type="button" onclick="previewYoutube()"
+                                                data-toggle="tooltip" data-placement="top" title=""
+                                                data-original-title="미리보기"><i class="far fa-eye"></i></button>
+                                    </div>
+                                </div>
+                            </label>
+                            <div class="youtube-player" style="display:none;width:512px;height:288px;"></div>
+                        </div>
+                    </div>
+                    <div class="section-title m-0">활성화</div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>사용 유무(관리자용) <code><i class="fas fa-check"></i></code></label>
+                                <div class="custom-switches-stacked mt-2">
+                                    <label class="custom-switch pl-0">
+                                        <input type="radio" name="booth_use_yn" value="Y" class="custom-switch-input"
+                                            {{#if (checkempty booth_use_yn) }}checked{{/if}}
+                                            {{#if (isEqual 'Y' booth_use_yn) }}checked{{/if}}>
+                                        <span class="custom-switch-indicator"></span>
+                                        <span class="custom-switch-description">사용</span>
+                                    </label>
+                                    <label class="custom-switch pl-0">
+                                        <input type="radio" name="booth_use_yn" value="N" class="custom-switch-input"
+                                               {{#if (isEqual 'N' booth_use_yn) }}checked{{/if}}>
+                                        <span class="custom-switch-indicator"></span>
+                                        <span class="custom-switch-description">사용 안함</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>노출 유무(사용자) <code><i class="fas fa-check"></i></code></label>
+                                <div class="custom-switches-stacked mt-2">
+                                    <label class="custom-switch pl-0">
+                                        <input type="radio" name="booth_display_yn" value="Y"
+                                               class="custom-switch-input"
+                                            {{#if (checkempty booth_display_yn) }}checked{{/if}}
+                                            {{#if (isEqual 'Y' booth_display_yn) }}checked{{/if}}
+                                        >
+                                        <span class="custom-switch-indicator"></span>
+                                        <span class="custom-switch-description">노출</span>
+                                    </label>
+                                    <label class="custom-switch pl-0">
+                                        <input type="radio" name="booth_display_yn" value="N"
+                                               class="custom-switch-input"
+                                               {{#if (isEqual 'N' booth_display_yn) }}checked{{/if}}>
+                                        <span class="custom-switch-indicator"></span>
+                                        <span class="custom-switch-description">노출 안함</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                {{#if (checkempty id) }}
+                    <button type="submit" class="btn btn-primary">부스 생성</button>
+                {{else}}
+                    <button type="submit" class="btn btn-warning">수정</button>
+                {{/if}}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+            var expo_list = boothTable.ajax.json().expo_list;
+            var expo_select = $.map(expo_list, function (obj) {
+                obj.id = obj.id || obj.pk;
+                obj.text = obj.expo_name;
+                obj.html = `${obj.text} (<small>${obj.expo_open_date} ~ ${obj.expo_close_date}</small>)`;
+
+                return obj;
+            });
+
+            var company_list = boothTable.ajax.json().company_list;
+            var company_select = $.map(company_list, function (obj) {
+                obj.id = obj.id || obj.pk;
+                obj.text = obj.company_name;
+                obj.html = `<div class="d-flex justify-content-between">${obj.text} <small>${obj.company_tel1}</small></div>`;
+
+                return obj;
+            });
+
+            $("#select-company").select2({
+                language: "ko",
+                data: company_select,
+                placeholder: "기업 선택을 해주세요.",
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                templateResult: function (data) {
+                    return data.html;
+                },
+                templateSelection: function (data) {
+                    return data.text;
+                }
+            });
+
+            $("#select-expo").select2({
+                language: "ko",
+                data: expo_select,
+                placeholder: "박람회 선택을 해주세요.",
+                escapeMarkup: function (markup) {
+                    return markup;
+                },
+                templateResult: function (data) {
+                    return data.html;
+                },
+                templateSelection: function (data) {
+                    return data.text;
+                }
+            });
+
+            /* Booth */
+            var saveForm = $('form[name=booth-save]');
+
+            saveForm.submit(function (e) {
+                e.preventDefault();
+                var button = $(this).find("button[type=submit]");
+                var formData = new FormData(this);
+                var sortableData = JSON.stringify(strToObject());
+                formData.append('sortable', sortableData)
+
+                $.ajax({
+                    type: 'POST',
+                    url: "/admin/booth-save",
+                    dataType: "JSON",
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function () {
+                        if (!button.hasClass('btn-progress'))
+                            button.addClass('btn-progress');
+                    },
+                    success: function (res) {
+                        if (button.hasClass('btn-progress'))
+                            button.removeClass('btn-progress');
+                        if (res.result === 'OK') {
+                            swal({
+                                text: res.msg,
+                                icon: 'success',
+                                button: true,
+                            }).then(function (result) {
+                                if (result) {
+                                    boothTable.ajax.reload(null, false);
+                                    $('#modal-lg').modal('hide')
+                                }
+                            });
+
+                        } else {
+                            swal({
+                                text: res.msg,
+                                icon: 'error',
+                                button: true,
+                            });
+                        }
+
+                    },
+                    error: function (err) {
+                        if (button.hasClass('btn-progress'))
+                            button.removeClass('btn-progress');
+                        ajaxError(err)
+                    }
+                });
+            });
+            $('input[name=booth_youtube_url]').on('keyup', function () {
+                $('input[name=booth_movtype]').each(function () {
+                    if ($(this).val() === 'youtube')
+                        $(this).prop('checked', true);
+                });
+            });
+            $('input[name=booth_movtype]').change(function () {
+                if ($(this).val() === null || $(this).val() === '') {
+                    $('input[name=booth_youtube_url]').val('');
+                    previewYoutube();
+                }
+            });
+            $('.sortable').sortable({
+                swap: true,
+                swapClass: 'highlight', // The class applied to the hovered swap item
+                handle: '.handle', // handle's class
+                animation: 150,
+                fallbackOnBody: true,
+                // swapThreshold: 0.65,
+                onEnd: function (evt) {
+                },
+                stop: function (event, ui) {
+                }
+            });
+        });
+
+        function YouTubeGetID(url) {
+            var ID = '';
+            url = url.replace(/(>|<)/gi, '').split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+            if (url[2] !== undefined) {
+                ID = url[2].split(/[^0-9a-z_\-]/i);
+                ID = ID[0];
+            } else {
+                ID = url;
+            }
+            return ID;
+        }
+
+        function ytVidId(url) {
+            var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+            return (url.match(p)) ? RegExp.$1 : false;
+        }
+
+        function previewYoutube() {
+            var val = $('input[name=booth_youtube_url]').val();
+            var player = $('.youtube-player');
+            if (val.length < 1) {
+                player.hide();
+                return;
+            }
+            if (!ytVidId(val)) {
+                swal({
+                    text: '유효하지 않는 Youtube 주소입니다.',
+                    icon: 'error',
+                    button: true,
+                });
+                player.hide();
+                return;
+            }
+            var id = YouTubeGetID(val);
+            var embed = `<iframe frameborder="0" scrolling="no" marginheight="0" marginwidth="0"width="100%" height="100%" type="text/html" src="https://www.youtube.com/embed/${id}?autoplay=1&fs=0&iv_load_policy=3&showinfo=0&rel=0&cc_load_policy=0&start=0&end=0" frameborder="0" allowfullscreen></iframe>`;
+            player.html(embed);
+            player.show();
+        }
+
+        /* updatePhotoPreview */
+        function updatePhotoPreview(obj) {
+            var reader = new FileReader();
+            var target = $(obj).data('target');
+
+            reader.onload = (e) => {
+                var img = $("#" + target + " img");
+                img.attr('src', e.target.result);
+                img.show();
+                // $("#" + target +" img.imgInp-origin-img" ).hide();
+            };
+            reader.readAsDataURL(obj.files[0]);
+        }
+
+        function addDetailImage(ele) {
+            var files = $(ele)[0].files;
+            var cloned = $(ele).clone()
+
+            var i = 0,
+                len = files.length;
+            (function readFile(n) {
+                var reader = new FileReader();
+                var f = files[n];
+                reader.onload = function(e) {
+                    var item = `
+                                    <li class="list-group-item handle" data-id="isNewFile">
+                                        <div class="row justify-content-between mb-2">
+                                            <div class="col ml-auto mr-auto pr-1">
+                                                <button type="button" class="btn btn-sm btn-icon btn-outline-danger btn-block text-left">
+                                                    <i class="fas fa-arrows-alt-v"></i>
+                                                    드래그&드랍 하여 순서 변경
+                                                    <span>${f.name}</span>
+                                                </button>
+                                            </div>
+                                            <div class="col-auto text-right pl-0">
+                                                <button type="button" class="btn btn-sm btn-icon btn-outline-danger" onclick="removeDetailImageItem(this)"><i class="fas fa-trash"></i></button>
+                                            </div>
+                                        </div>
+                                        <label class="imagecheck">
+                                            <div class="image-preview m-0">
+                                                <img src="${e.target.result}" class="img img-fluid" alt="">
+                                            </div>
+                                        </label>
+                                        <button type="button" class="btn btn-sm btn-block btn-light detail-more" onclick="moreDetailImage(this)">펼치기</button>
+                                    </li>
+
+                    `;
+                    item = $(item).prepend(cloned.attr('name', 'select_attach[]').removeAttr("id onchange"))
+                    $('.sortable').append(item);
+
+                    if (n < len -1) {readFile(++n)}else{$('#image-upload').val('');}
+                };
+                reader.readAsDataURL(f);
+            }(i));
+        }
+
+        function removeDetailImageItem(ele) {
+            var data = $(ele).closest('li').data('id');
+            swal({
+                text: '해당 이미지를 삭제하시겠습니까?',
+                icon: 'warning',
+                dangerMode: true,
+                buttons: {
+                    confirm: "삭제",
+                    cancel: "취소",
+                },
+            }).then(function (result) {
+                if (result) {
+                    if (data !== 'isNewFile') {
+                        $.ajax({
+                            type: 'POST',
+                            url: "/admin/booth-deldetail",
+                            dataType: "JSON",
+                            data: data,
+                            success: function (res) {
+                                iziToast.success({
+                                    message: res.msg,
+                                    position: 'topRight'
+                                });
+                                $(ele).closest('li').remove();
+                                boothTable.ajax.reload(null, false);
+                            }
+                        });
+                    } else {
+                        $(ele).closest('li').remove();
+                    }
+
+                }
+            });
+        }
+
+        function strToObject(str) {
+            var array = $('.sortable').sortable('toArray');
+            var result = [];
+            $.each(array, function (i, value) {
+                result.push((value !== 'isNewFile') ? $.parseJSON(value) : {'isNewFile': true});
+            })
+            return result;
+        }
+
+        function moreDetailImage(ele) {
+            var preview = $(ele).closest('li').find('.image-preview');
+            if (preview.css('height') === '60px') {
+                preview.css('height', 'auto');
+                $(ele).text('접기');
+            } else {
+                preview.css('height', '60px')
+                $(ele).text('펼치기');
+            }
+        }
+
+</script>

@@ -1,0 +1,410 @@
+<script id="editpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <form name="company-save" method="post" action="/admin/company-save">
+            <input type="hidden" name="id" value="{{id}}">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{#if (checkempty id) }}
+                        <span class="badge badge-info">신규</span>
+                    {{else}}
+                        {{company_name}}
+                        <span class="badge badge-warning">수정</span>
+                    {{/if}}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <section class="section">
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#link1">기본 정보</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane pt-0 show active" id="link1">
+                            <div class="container"
+                                 style="border-color: #dee2e6 #dee2e6 #fff;border-left: 1px solid #dee2e6;border-right: 1px solid #dee2e6;border-bottom: 1px solid #dee2e6;">
+                                <div class="row pt-3">
+                                    <div class="col-12 section-title m-0">기본 정보</div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>기업명 <code><i class="fas fa-check"></i></code></label>
+                                            <div class="input-group">
+                                                <input type="text" name="company_name" class="form-control"
+                                                       placeholder="기업명을 입력해주세요." value="{{company_name}}">
+                                                <!--
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-light btn-icon" type="button"
+                                                            onclick=""
+                                                            data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="기업 검색"><i class="ion-ios-search"></i></button>
+                                                </div>
+                                                -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>인증 유무 <code><i class="fas fa-check"></i></code></label>
+                                            <select class="form-control" name="company_level">
+                                                <option>인증 상태를 선택해주세요</option>
+                                                <option value="100" {{#if (isEqual 100 company_level) }}selected{{/if}}>
+                                                    인증완료
+                                                </option>
+                                                <option value="90" {{#if (isEqual 90 company_level) }}selected{{/if}}>
+                                                    미인증
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>전화번호 1 <code><i class="fas fa-check"></i></code></label>
+                                            <input type="tel" name="company_tel1" class="form-control"
+                                                   placeholder="전화번호를 입력해주세요." value="{{company_tel1}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>홈페이지</label>
+                                            <input type="text" name="company_url" class="form-control"
+                                                   placeholder="URL을 입력해주세요." value="{{company_url}}">
+                                        </div>
+                                    </div>
+                                    <!--
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>전화번호 2</label>
+                                            <input type="tel" name="company_tel2" class="form-control"
+                                                   placeholder="전화번호를 입력해주세요." value="">
+                                        </div>
+                                    </div>
+                                    -->
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>이메일 <code><i class="fas fa-check"></i></code></label>
+                                            <input type="email" name="company_email" class="form-control"
+                                                   placeholder="이메일을 입력해주세요." value="{{company_email}}">
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>주소 <code><i class="fas fa-check"></i></code></label>
+                                            <div class="input-group">
+                                                <input type="text" name="company_address1" id="address1"
+                                                       class="form-control"
+                                                       placeholder="주소를 입력해주세요." aria-label=""
+                                                       value="{{company_address1}}">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary btn-icon" type="button"
+                                                            onclick="execDaumPostcode()"
+                                                            data-toggle="tooltip" data-placement="top" title=""
+                                                            data-original-title="찾기"><i class="fa fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group mb-1">
+                                            <label>기업 이미지</label>
+{{!--                                            <div id="image-preview" class="image-preview" style="background-image:url({{company_image_url}});background-size: contain;background-position: center center; background-repeat:no-repeat;">--}}
+{{!--                                                <label for="image-upload" id="image-label">파일 선택</label>--}}
+{{!--                                                <input type="file" name="image" id="image-upload" />--}}
+{{!--                                            </div>--}}
+
+                                            <input type="file" name="select_file" class="form-control"
+                                                   accept="image/x-png,image/gif,image/jpeg"
+                                                   data-target="imgInp_target"
+                                                   onchange="updatePhotoPreview(this);"
+                                            >
+                                            <div class="invalid-feedback d-block">
+                                                2MB 이하
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div id="imgInp_target">
+                                            <img src="{{company_image_url}}" class="imgInp-new-img inboximg img-fluid"
+                                                 style="">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12 section-title mb-0">추가 정보</div>
+                                    <div class="col-12">
+                                        <div class="form-group mb-1">
+                                            <label>첨부파일(소개자료)</label>
+                                            <input type="file" name="file1" class="form-control"
+                                                   accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf"
+                                            >
+                                            <div class="invalid-feedback d-block">
+                                                10MB 이하
+                                            </div>
+                                            {{#if (checknotempty company_attachment_file_url1) }}
+                                            <div id="fileInp_target">
+                                                <a href="/storage/{{company_attachment_file_url1}}" class="btn btn-link" download="{{company_attachment_file_name1}}">{{company_attachment_file_name1}}</a>
+                                                <i class="fas fa-trash-alt text-danger" onClick='file_delete(this)'
+                                                   style="cursor:pointer"></i>
+                                            </div>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                            <label>회사 소개</label>
+                                            <textarea class="form-control" name="company_info1" rows="3"
+                                                      placeholder="회사 소개를 작성해 주세요.&#13;&#10;"
+                                                      style="height:100px;">{{company_info1}}</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label>노출 유무 <code><i class="fas fa-check"></i></code></label>
+                                            <div class="custom-switches mt-2">
+                                                <label class="custom-switch pl-0">
+                                                    <input type="radio" name="company_display_status" value="Y"
+                                                           class="custom-switch-input"
+                                                        {{#if (checkempty company_display_status) }}checked{{/if}}
+                                                        {{#if (isEqual 'Y' company_display_status) }}checked{{/if}}
+                                                    >
+                                                    <span class="custom-switch-indicator"></span>
+                                                    <span class="custom-switch-description">노출</span>
+                                                </label>
+                                                <label class="custom-switch">
+                                                    <input type="radio" name="company_display_status" value="N"
+                                                           class="custom-switch-input"
+                                                           {{#if (isEqual 'N' company_display_status) }}checked{{/if}}
+                                                    >
+                                                    <span class="custom-switch-indicator"></span>
+                                                    <span class="custom-switch-description">노출 안함</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                {{#if (checkempty id) }}
+                    <button type="submit" class="btn btn-primary">기업 생성</button>
+                {{else}}
+                    <button type="submit" class="btn btn-warning">수정</button>
+                {{/if}}
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        $(function () {
+/*            $.uploadPreview({
+                input_field: "#image-upload",   // Default: .image-upload
+                preview_box: "#image-preview",  // Default: .image-preview
+                label_field: "#image-label",    // Default: .image-label
+                label_default: "파일 선택",   // Default: Choose File
+                label_selected: "파일 변경",  // Default: Change File
+                no_label: false                 // Default: false
+            });*/
+            /* saveForm */
+            var saveForm = $('form[name=company-save]');
+            saveForm.find("button[type=submit]").click(function (e) {
+                e.preventDefault();
+                var button = $(this);
+                var formData = new FormData(saveForm[0]);
+                $.ajax({
+                    type: 'POST',
+                    url: "/admin/company-save",
+                    dataType: "JSON",
+                    data: formData,
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    beforeSend: function () {
+                        if (!button.hasClass('btn-progress')){
+                            button.addClass('disabled btn-progress');
+                        }
+                    },
+                    success: function (res) {
+                        if (button.hasClass('btn-progress'))
+                            button.removeClass('btn-progress');
+                        if (res.result === 'OK') {
+                            swal({
+                                text: res.msg,
+                                icon: 'success',
+                                button: true,
+                            }).then(function (result) {
+                                if (result) {
+                                    companyTable.ajax.reload(null, false);
+                                    $('#modal-lg').modal('hide')
+                                }
+                            });
+
+                        } else {
+                            swal({
+                                text: res.msg,
+                                icon: 'error',
+                                button: true,
+                            });
+                        }
+
+                    },
+                    error: function (err) {
+                        if (button.hasClass('btn-progress')){
+                            button.removeClass('disabled btn-progress');
+                        }
+                        ajaxError(err)
+                    }
+                });
+            });
+
+        });
+</script>
+
+<script id="person_pop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+                {{company_name}}
+                <span class="badge badge-warning">담당자 변경</span>
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <section class="section">
+                <div class="row">
+                    <div class="col-12 pull-right">
+                        <div class="form-group form-group-sm form-inline m-0 mb-2">
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text form-control-sm">마스터</div>
+                                </div>
+                                <input type="text" class="form-control form-control-sm readonly" id="master-pserson"
+                                       value="{{#if (checkempty email) }}{{else}}{{name}} ({{email}}){{/if}}" readonly
+                                       style="width:20rem;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 section-title m-0 mb-2">담당자 목록</div>
+                    <div class="col-12">
+                        <table class="table table-sm table-striped">
+                            <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>이메일</th>
+                                <th>전화번호</th>
+                                <th style="width:44px;text-align:center;">삭제</th>
+                            </tr>
+                            </thead>
+                            <tbody id="person_tbody">
+                            {{#if ( gt responsibility.length 1 ) }}
+                                {{#each responsibility}}
+                                    {{#if (isNotEqual id ../company_master_user_id ) }}
+                                        <tr data-id='{{id}}' data-name='{{name}}'>
+                                            <td>{{name}}</td>
+                                            <td>{{email}}</td>
+                                            <td>{{tel}}</td>
+                                            <td class="center">
+                                                <i class="fas fa-trash-alt text-danger" onClick='pserson_delete(this)'
+                                                   style="cursor:pointer"></i>
+                                            </td>
+                                        </tr>
+                                    {{/if}}
+                                {{/each}}
+                            {{else}}
+                                <tr id="pserson-onedata-tr">
+                                    <td colspan="6" style="text-align: center;padding: 30px;">담당자가 없습니다</td>
+                                </tr>
+                            {{/if}}
+                            </tbody>
+                        </table>
+
+                    </div>
+                    <div class="col-12 section-title m-0 mb-2">사용자 검색</div>
+                    <div class="col-12">
+                        <table id="search_usertable" class="table table-sm table-striped" style="width:100%;">
+                            <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>이름</th>
+                                <th>이메일</th>
+                                <th>전화번호</th>
+                                <th>관리</th>
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            search_usertable = $('#search_usertable').DataTable({
+                "processing": true,
+                "serverSide": true,
+                "lengthMenu": [3],
+                "ajax": "/admin/company-searchuser",
+                "order": [[0, 'desc']],
+                "language": {
+                    "info": "_TOTAL_ 건",
+                    "infoFiltered": "/ 전체 _MAX_ 건",
+                    "infoEmpty": "검색된 결과가 없습니다.",
+                    "emptyTable": "검색된 결과가 없습니다.",
+                    "zeroRecords": "검색된 결과가 없습니다.",
+                    "lengthMenu": "표시 _MENU_ 개",
+                    "search": "검색:",
+                    "paginate": {
+                        "first": "처음",
+                        "last": "끝",
+                        "next": "다음",
+                        "previous": "이전"
+                    },
+                },
+                "initComplete": function (settings, json) {
+                },
+                "createdRow": function (row, data, dataIndex) {
+                },
+                "columnDefs": [
+                    {
+                        "targets": [0],
+                        "visible": false,
+                        "searchable": false
+                    },
+                    {"targets": [4], "searchable": false},
+                ],
+                "columns": [
+                    {"data": "id"},
+                    {"data": "name"},
+                    {"data": "email"},
+                    {"data": "tel"},
+
+                    {
+                        "data": "id",
+                        "render": function (data) {
+                            return `
+                                <div class="button">
+                  <button type="button" class="btn btn-warning btn-sm" onClick="change_person_prc(this)" style="line-height:19.5px;vertical-align:top;">
+                  담당자 등록
+                  </button>
+                  <button type="button" class="btn btn-danger btn-sm" onClick="change_master_prc(this)" style="line-height:19.5px;vertical-align:top;">
+                  마스터 변경
+                  </button>
+                  </div>
+                  `;
+                        },
+                    }
+
+                ],
+            });
+        });
+</script>

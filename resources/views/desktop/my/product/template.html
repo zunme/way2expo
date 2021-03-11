@@ -1,0 +1,204 @@
+<script id="template-product-detail" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <form name="productForm">
+            <input type="hidden" name="id" value="{{id}}">
+            <input type="hidden" name="expo_id" value="{{expo_id}}">
+            <input type="hidden" name="booth_id" value="{{booth_id}}">
+            <div class="modal-header">
+                <h5 class="title modal-title m-0" id="exampleModalLabel">
+                    {{#if (checkempty id)}}
+                        상품추가
+                    {{else}}
+                        {{prd_title}}
+                    {{/if}}
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{#if (isEqual prd_use_yn 'N')}}
+                    <h4 class="text-danger">관리자에 의해 노출이 되지 않는 상품입니다.</h4>
+                {{/if}}
+                <div class="form-group">
+                    <label>상품 공개*</label>
+                    <div class="form-check form-check-radio form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="prd_display_yn"
+                                   value="Y"
+                                {{#if (isEqual prd_display_yn 'Y')}}
+                                   checked
+                                {{/if}}
+                                {{#if (checkempty id)}}
+                                   checked
+                                {{/if}}
+                            > 공개
+                            <span class="circle"><span class="check"></span></span>
+                        </label>
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="prd_display_yn"
+                                   value="N"
+                                {{#if (isEqual prd_display_yn 'N')}}
+                                   checked
+                                {{/if}}
+
+                            > 비공개
+                            <span class="circle"><span class="check"></span></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>상품명*</label>
+                    <input type="text" name="prd_title" class="form-control" value="{{prd_title}}">
+                </div>
+                <small>5MB 이하 파일만 등록 가능합니다.(jpg,png,gif) 권장 사이즈 000x000</small>
+                <div class="form-row">
+                    <div class="col-12">
+                        <label>대표 이미지*</label>
+                        <input type="file" name="prd_img1" class="form-control form-control-file" accept="image/*"
+                               onchange="previewImg(this)">
+                        <div id="preview-prd_img1" class="preview-img"></div>
+                    </div>
+                    <div class="col-3">
+                        <label>추가 이미지</label>
+                        <input type="file" name="prd_img2" class="form-control form-control-file" accept="image/*"
+                               onchange="previewImg(this)">
+                        <div id="preview-prd_img2" class="preview-img"></div>
+                    </div>
+                    <div class="col-3">
+                        <label>추가 이미지</label>
+                        <input type="file" name="prd_img3" class="form-control form-control-file" accept="image/*"
+                               onchange="previewImg(this)">
+                        <div id="preview-prd_img3" class="preview-img"></div>
+                    </div>
+                    <div class="col-3">
+                        <label>추가 이미지</label>
+                        <input type="file" name="prd_img4" class="form-control form-control-file" accept="image/*"
+                               onchange="previewImg(this)">
+                        <div id="preview-prd_img4" class="preview-img"></div>
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label>제품 가격 설정*</label>
+                    <div class="form-group">
+                        <div class="form-check form-check-radio form-check-inline">
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="prd_viewprice"
+                                       value="Y"
+                                    {{#if (isEqual prd_viewprice 'Y')}}
+                                       checked
+                                    {{/if}}
+                                    {{#if (checkempty id)}}
+                                       checked
+                                    {{/if}}
+                                > 가격고지
+                                <span class="circle"><span class="check"></span></span>
+                            </label>
+                            <label class="form-check-label">
+                                <input class="form-check-input" type="radio" name="prd_viewprice"
+                                       value="N"
+                                    {{#if (isEqual prd_viewprice 'N')}}
+                                       checked
+                                    {{/if}}
+
+                                > 가격문의
+                                <span class="circle"><span class="check"></span></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>제품원가*</label>
+                        <input type="number" id="prd_org_price" name="prd_org_price" class="form-control"
+                               value="{{prd_org_price}}" min="0" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>판매가격*</label>
+                        <input type="number" id="prd_price" name="prd_price" class="form-control" value="{{prd_price}}"
+                               min="0" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>할인율*</label>
+                        <input type="text" id="prd_price_percent" name="prd_price_percent" class="form-control"
+                               value="{{prd_org_price}}" min="0" step="1" readonly>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>판매페이지 링크*</label>
+                    <input type="text" name="prd_url" class="form-control" value="{{prd_url}}">
+                </div>
+                <div class="form-group">
+                    <label>상품 상세이미지</label>
+                    <input type="file" id="prd_imgs" name="prd_imgs[]" accept="image/*" multiple/>
+                </div>
+            </div>
+            <div class="modal-footer">
+                {{#if (checkempty id)}}
+                    <button type="submit" class="btn btn-sm btn-black">추가</button>
+                {{else}}
+                    <button type="submit" class="btn btn-sm btn-warning">수정</button>
+                {{/if}}
+            </div>
+        </form>
+    </div>
+</script>
+<script id="template-product-copy" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <form name="productCopyForm">
+            <input type="hidden" name="booth_id" value="{{booth.id}}">
+            <div class="modal-header">
+                <h5 class="title modal-title m-0" id="exampleModalLabel">
+                    전체상품 복사하기
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <label for="boothSelectSub">대상 부스 선택</label>
+                <select id="boothSelectSub"
+                        name="selected_booth_id"
+                        class="form-control"
+                        data-style="btn btn-link"
+                >
+                    <option value="">선택</option>
+                    {{#each booths}}
+                        <option
+                            value={{id}}>{{booth_title}}</option>
+                    {{/each}}
+                </select>
+                <div class="my-product-sub-list d-none">
+                    <table class="table" id="dataTableSub">
+                        <thead>
+                        <tr>
+                            <th>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input class="form-check-input" type="checkbox"
+                                               id="sub-select-all" value="1">
+                                        <span class="form-check-sign"><em class="check"></em></span>
+                                    </label>
+                                </div>
+                            </th>
+                            <th>이미지</th>
+                            <th>전시상품 명</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <h4>전시상품 리스트</h4>
+                <div>
+                    저장할 부스
+                    <p>{{booth.booth_title}}</p>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-sm btn-black">취소</button>
+                <button type="submit" class="btn btn-sm btn-black btn-ajax">복사하기</button>
+            </div>
+        </form>
+    </div>
+
+</script>

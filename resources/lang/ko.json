@@ -1,0 +1,6 @@
+{
+    "validation.confirmed": "변경할 비밀번호가 동일하지 않습니다."
+    ,"validation.required": "비밀번호를 확인해주세요."
+    ,"The :attribute must be at least :length characters.": "비밀번호는 :length 자 이상입니다."
+    ,"The provided password does not match your current password." : "비밀번호를 확인해주세요"
+}

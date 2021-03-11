@@ -1,0 +1,17 @@
+{
+  "short_name": "Way2EXPO",
+  "name": "Way2EXPO",
+  "description": "Way2EXPO 온라인박람회",
+  "icons": [
+    {
+      "src": "/image/fav192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#fff",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#2196f3"
+}

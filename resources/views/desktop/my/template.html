@@ -1,0 +1,244 @@
+<script id="latestexpo" type="text/x-handlebars-template">
+    <section>
+        <h4 class="form-title mt-4">최근 본 박람회
+            <button class="btn btn-sm btn-link text-danger clearAllDB">전체삭제</button>
+        </h4>
+        <div class="row">
+            {{#each rows}}
+                <div class="col-3">
+                    <div class="card position-relative" style="min-width:250px;max-width:250px;">
+                        <img class="card-img-top" src="{{doc.img}}"
+                             style="width:250px;height:250px;">
+                        <div class="card-body p-0" style="min-height:104px;">
+                            <div class="card-badge text-center">
+                                <!--
+                                <span class="badge badge-black">#검색키워드</span>
+                                <span class="badge badge-black">#검색키워드</span>
+                                <span class="badge badge-black">#검색키워드</span>
+                                -->
+                            </div>
+                            <h4 class="card-title m-0 pt-1 pl-2 pr-2 shuffle-item__title">{{doc.title}}</h4>
+                            <p class="card-text m-0 pl-2 pr-2">{{doc.start}}
+                                ~ {{doc.end}}</p>
+                            <a href="/expo/{{key}}" class="stretched-link" role="button"></a>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+        <div class="row justify-content-center not-found" style="display:none;">
+            <div class="col-auto text-center">
+                <div class="info">
+                    <div class="icon">
+                        <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                            <i class="material-icons">search_off</i>
+                        </button>
+                    </div>
+                    <h4 class="info-title">일치하는 데이터가 없습니다.</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        $(function () {
+            $('.clearAllDB').on('click', function () {
+                Swal2.fire({
+                    text: '전체 삭제 하시겠습니까?',
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    showCancelButton: true
+                }).then(function (value) {
+                    if (value.isConfirmed) {
+                        myexpoDB.destroy().then(function (response) {
+                            window.location.reload();
+                        }).catch(function (err) {
+                            console.log(err);
+                        });
+                    }
+                });
+            });
+        })</script>
+<script id="latestbooth" type="text/x-handlebars-template">
+    <section>
+        <h4 class="form-title mt-4">최근 본 부스
+            <button class="btn btn-sm btn-link text-danger clearAllDB">전체삭제</button>
+        </h4>
+        <div class="row">
+            {{#each rows}}
+                <div class="col-3">
+                    <div class="card position-relative" style="min-width:250px;max-width:250px;">
+                        <img class="card-img-top" src="{{doc.img}}"
+                             style="width:250px;height:250px;">
+                        <div class="card-body p-0" style="min-height:104px;">
+                            <div class="card-badge text-center">
+                                <!--
+                                <span class="badge badge-black">#검색키워드</span>
+                                <span class="badge badge-black">#검색키워드</span>
+                                <span class="badge badge-black">#검색키워드</span>
+                                -->
+                            </div>
+                            <h4 class="card-title m-0 pt-1 pl-2 pr-2 shuffle-item__title">{{doc.booth_title}}</h4>
+                            <a href="/expo/{{doc.expo_code}}/{{id}}" class="stretched-link" role="button"></a>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+        </div>
+        <div class="row justify-content-center not-found" style="display:none;">
+            <div class="col-auto text-center">
+                <div class="info">
+                    <div class="icon">
+                        <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                            <i class="material-icons">search_off</i>
+                        </button>
+                    </div>
+                    <h4 class="info-title">일치하는 데이터가 없습니다.</h4>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <script>
+        $(function () {
+            $('.clearAllDB').on('click', function () {
+                Swal2.fire({
+                    text: '전체 삭제 하시겠습니까?',
+                    icon: 'warning',
+                    showConfirmButton: true,
+                    showCancelButton: true
+                }).then(function (value) {
+                    if (value.isConfirmed) {
+                        myBootmDB.destroy().then(function (response) {
+                            window.location.reload();
+                        }).catch(function (err) {
+                            console.log(err);
+                        });
+                    }
+                });
+            });
+        })
+
+</script>
+<script id="template-favorites-expo" type="text/x-handlebars-template">
+    <div class="info text-center not-found d-none">
+        <div class="icon">
+            <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                <i class="material-icons">search_off</i>
+            </button>
+        </div>
+        <h4 class="info-title">일치하는 데이터가 없습니다.</h4>
+    </div>
+</script>
+<script id="template-favorites-booth" type="text/x-handlebars-template">
+    <div class="info text-center not-found d-none">
+        <div class="icon">
+            <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                <i class="material-icons">search_off</i>
+            </button>
+        </div>
+        <h4 class="info-title">일치하는 데이터가 없습니다.</h4>
+    </div>
+</script>
+<script id="template-favorites-product" type="text/x-handlebars-template">
+    {{#each product}}
+        {{this.id}}
+    {{/each}}
+    <div class="info text-center not-found d-none">
+        <div class="icon">
+            <button class="btn btn-danger btn-lg btn-fab btn-round btn-disabled">
+                <i class="material-icons">search_off</i>
+            </button>
+        </div>
+        <h4 class="info-title">일치하는 데이터가 없습니다.</h4>
+    </div>
+</script>
+<script id="template-favorites-booth-item" type="text/x-handlebars-template">
+    <div class="row">
+        {{#each data}}
+            <div class="col-3 card-item">
+                <button type="button" class="btn btn-sm btn-danger btn-favorite-remove" data-favorite="booth" data-id="{{booth.id}}">삭제</button>
+                <div class="card card-profile card-plain card-search-booth"
+                     style="padding: 5px 5px;border: 1px #e2e2e2 solid;">
+                    <a href="/expo/{{booth.expo_booth.expo_code}}/{{booth.id}}"
+                       data-booth-id="{{booth.id}}"
+                       >
+
+                        <img class="img"
+                             src="/storage/{{booth.booth_image_url}}"
+                             style="width:150px;height:150px;border: 1px #e2e2e2 solid;">
+                    </a>
+                    <div class="card-body">
+                        <a href="#" data-toggle="modal"
+                           id="booth_{{booth.id}}"
+                           data-booth-id="{{booth.id}}"
+                           class="open-booth">
+                            <h4 class="card-title mt-0 text-break m-0 card-item__title"
+                                style="height:64px;">{{booth.booth_title}}</h4>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</script>
+<script id="template-favorites-expo-item" type="text/x-handlebars-template">
+    <div class="row">
+        {{#each data}}
+            <div class="col-3 card-item">
+                <div class="card card-profile card-plain card-search-booth"
+                     style="padding: 5px 5px;border: 1px #e2e2e2 solid;">
+                    <button type="button" class="btn btn-sm btn-danger btn-favorite-remove" data-favorite="expo" data-id="{{expo.id}}">삭제</button>
+                    <a href="/expo/{{expo.expo_code}}" data-toggle="modal"
+                       id="expo_{{expo.id}}"
+                       data-booth-id="{{expo.id}}"
+                       class="open-expo">
+
+                        <img class="img"
+                             src="/storage/{{expo.expo_image_url}}"
+                             style="width:150px;height:150px;border: 1px #e2e2e2 solid;">
+                    </a>
+                    <div class="card-body">
+                        <a href="/expo/{{expo.expo_code}}"
+                           data-expo-id="{{expo.id}}"
+                        >
+                            <h4 class="card-title mt-0 text-break m-0 card-item__title"
+                                style="height:64px;">{{expo.expo_name}}</h4>
+                            <p>[{{getDateStatus expo.expo_open_date expo.expo_close_date}}]</p>
+                            <p>
+                                {{expo.expo_open_date}}~{{expo.expo_close_date}}
+                            </p>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</script>
+<script id="template-favorites-product-item" type="text/x-handlebars-template">
+    <div class="row" style="min-height:413px;">
+        {{#each data}}
+            <div class="col-3 p-3" id="booth_product_{{id}}">
+                <button type="button" class="btn btn-sm btn-danger btn-favorite-remove" data-favorite="product" data-id="{{product.id}}">삭제</button>
+                <div class="card position-relative" style="width:100px;height:100px;">
+                    <a href="/expo/{{product.expo.expo_code}}/{{product.booth_id}}#product_{{product.id}}" role="button" class="btn-product">
+                        <img alt="{{product.prd_title}}" class="card-img-top img img-fluid" src="/storage/{{product.prd_img1}}"
+                             style="width:100px;height:100px;">
+                    </a>
+                </div>
+                <div class="card-body p-0" style="min-height:85px;">
+                    <a href="/expo/{{product.expo.expo_code}}/{{product.booth_id}}#product_{{product.id}}" role="button" class="btn-product">
+                        <h4 class="card-title m-0 pt-1 pl-2 pr-2">{{product.prd_title}}</h4>
+                        {{#if (isEqual product.prd_viewprice 'Y')}}
+                            <p class="card-text m-0 p-0"><strike>{{product.prd_org_price}}원</strike> {{product.prd_price_percent}}%</p>
+                            <p class="card-text m-0 p-0">{{product.prd_price}}원</p>
+                        {{else}}
+                            <p class="card-text m-0 p-0">가격문의</p>
+                        {{/if}}
+                    </a>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+</script>

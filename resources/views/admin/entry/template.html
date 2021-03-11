@@ -1,0 +1,114 @@
+<script id="viewpop" type="text/x-handlebars-template">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">
+                상세보기
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <section class="section">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">박람회 명</label>
+                            <div class="col-lg-8 col-md-8">{{expo.expo_name}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">출품 분야</label>
+                            <div class="col-lg-8 col-md-8">{{category_text}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">출품 분야 상세</label>
+                            <div class="col-lg-8 col-md-8">{{category_detail_text}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">기업 명(국문)</label>
+                            <div class="col-lg-8 col-md-8">{{company_name}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">기업 명(영문)</label>
+                            <div class="col-lg-8 col-md-8">{{company_name_eng}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">기업 주소</label>
+                            <div class="col-lg-8 col-md-8">{{company_address1}} {{company_address2}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">회사 홈페이지</label>
+                            <div class="col-lg-8 col-md-8">{{company_url}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">사업자등록번호</label>
+                            <div class="col-lg-8 col-md-8">{{biz_no}}  <a href="/download?path={{attachment_file}}"
+        class="btn btn-link"">첨부파일 다운로드</a>
+
+    </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">대표자 이름</label>
+                            <div class="col-lg-8 col-md-8">{{ceo_name}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">대표자 이메일</label>
+                            <div class="col-lg-8 col-md-8">{{ceo_email}}</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">출품 담당자 이름</label>
+                            <div class="col-lg-8 col-md-8">{{manager_name}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">출품 담당자 이메일</label>
+                            <div class="col-lg-8 col-md-8">{{manager_email}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">출품 담당자 직위</label>
+                            <div class="col-lg-8 col-md-8">{{manager_position}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">출품 담당자 전화번호</label>
+                            <div class="col-lg-8 col-md-8">{{manager_tel}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">출품 담당자 휴대전화</label>
+                            <div class="col-lg-8 col-md-8">{{manager_phone}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">출품 담당자 팩스</label>
+                            <div class="col-lg-8 col-md-8">{{manager_fax}}</div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">세금계산서 담당자 이름</label>
+                            <div class="col-lg-8 col-md-8">{{tax_manager_name}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">세금계산서 담당자 이메일</label>
+                            <div class="col-lg-8 col-md-8">{{tax_manager_email}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">세금계산서 담당자 직위</label>
+                            <div class="col-lg-8 col-md-8">{{tax_manager_position}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">세금계산서 담당자 전화번호</label>
+                            <div class="col-lg-8 col-md-8">{{tax_manager_tel}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">세금계산서 담당자 휴대전화</label>
+                            <div class="col-lg-8 col-md-8">{{tax_manager_phone}}</div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-md-4 col-lg-4 text-left">세금계산서 담당자 팩스</label>
+                            <div class="col-lg-8 col-md-8">{{tax_manager_fax}}</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+</script>

@@ -1,0 +1,324 @@
+<script id="template-entry-step1" type="text/x-handlebars-template">
+    <form name="entryFormStep1" method="POST">
+        <input type="hidden" name="step" value="1">
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <div class="form-group">
+                    <label for="expoSelect">출품희망 박람회</label>
+                    <select id="expoSelect"
+                            class="form-control selectpicker"
+                            data-style="btn btn-link"
+                            name="expo_id"
+                            title="박람회를 선택해주세요."
+                    >
+                        {{#each expos}}
+                            <option value="{{id}}">{{expo_name}}</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="form-group mt-1">
+                    <label>출품 분야</label><br>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="category_text[]"
+                                   value="유통/도매업"> 유통/도매업
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="category_text[]"
+                                   value="소매업"> 소매업
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="category_text[]"
+                                   value="제조업"> 제조업
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="category_text[]"
+                                   value="무역업"> 무역업
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="category_text[]"
+                                   value="서비스업"> 서비스업
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="category_text[]"
+                                   value="기타"> 기타
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="category_detail_text">출품 분야</label>
+                    <textarea class="form-control" name="category_detail_text" id="category_detail_text" cols="30"
+                              rows="10" placeholder="출품 분야와 등록 예정 상품에 대해 입력해주세요."></textarea>
+                </div>
+                <div class="form-group text-right">
+                    <button type="submit" id="nextBtn" class="btn btn-sm btn-black">다음</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</script>
+<script id="template-entry-step2" type="text/x-handlebars-template">
+    <form name="entryFormStep2" method="POST">
+        <input type="hidden" name="step" value="2">
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <div id="accordion" role="tablist" aria-multiselectable="true" class="card-collapse">
+                    <div class="card card-plain">
+                        <div class="card-header" role="tab" id="headingOne">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                개인정보 수집 및 이용약관 동의 (필수)
+                                <i class="material-icons">keyboard_arrow_down</i>
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="card-body">
+                                {{{ expo.privacy_terms_text }}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="agree_privacy"
+                                   value="Y"> 동의
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+
+                    <div class="card card-plain">
+                        <div class="card-header" role="tab" id="headingTwo">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                박람회 온라인 부스 신청 (필수)
+
+                                <i class="material-icons">keyboard_arrow_down</i>
+                            </a>
+                        </div>
+                        <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="card-body">
+                                {{{ expo.entry_terms_text }}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="agree_entry"
+                                   value="Y"> 동의
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+
+                    <div class="card card-plain">
+                        <div class="card-header" role="tab" id="headingThree">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                개인정보 제3자 제공 동의 (선택)
+
+                                <i class="material-icons">keyboard_arrow_down</i>
+                            </a>
+                        </div>
+                        <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="card-body">
+                                {{{ expo.provided_terms_text }}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="checkbox" name="agree_provided"
+                                   value="Y"> 동의
+                            <span class="form-check-sign">
+                                                <span class="check"></span>
+                                            </span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="">기업명(국문)*</label>
+                    <input type="text" class="form-control" name="company_name">
+                </div>
+                <div class="form-group">
+                    <label for="">기업명(영문)</label>
+                    <input type="text" class="form-control" name="company_name_eng">
+                </div>
+                <div class="form-group">
+                    <label for="">기업 주소*</label>
+                    <button type="button" class="btn btn-sm btn-black" onclick="execDaumPostcode()">주소검색</button>
+                    <input type="text" class="form-control" id="company_zip" name="company_zip">
+                    <input type="text" class="form-control" id="company_address1" name="company_address1">
+                    <input type="text" class="form-control" id="company_address2" name="company_address2">
+                </div>
+                <div class="form-group">
+                    <label for="">회사 홈페이지</label>
+                    <input type="text" class="form-control" name="company_url" placeholder="http://example.com">
+                </div>
+                <div class="form-group">
+                    <label for="">사업자등록번호*</label>
+                    <input type="text" class="form-control" name="biz_no">
+                </div>
+                <div class="form-group">
+                    <label for="">대표자 이름*</label>
+                    <input type="text" class="form-control" name="ceo_name">
+                </div>
+                <div class="form-group">
+                    <label for="">대표자 이메일</label>
+                    <input type="text" class="form-control" name="ceo_email">
+                </div>
+                <div class="form-row">
+                    <label for="">사업자등록증 첨부*</label>
+                    <input type="file" name="attachment_file" class="form-control form-control-file" accept="image/*,.pdf">
+                    <small>이미지 파일 및 pdf 만 첨부가능 5MB 이하</small>
+                </div>
+                <div class="row justify-content-between">
+                    <div class="col-6">
+                        <h5 class="title">출품 담당자 정보 입력</h5>
+                        <div class="form-group">
+                            <label for="">출품 담당자 이름*</label>
+                            <input type="text" class="form-control" name="manager_name" value="{{user.name}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="">출품 담당자 이메일*</label>
+                            <input type="text" class="form-control" name="manager_email" value="{{user.email}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="">직위</label>
+                            <input type="text" class="form-control" name="manager_position" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">전화번호*</label>
+                            <input type="text" class="form-control" name="manager_tel" value="{{user.tel}}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="">휴대전화</label>
+                            <input type="text" class="form-control" name="manager_phone" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">팩스</label>
+                            <input type="text" class="form-control" name="manager_fax" value="">
+                        </div>
+
+                    </div>
+                    <div class="col-6">
+                        <h5 class="title">세금계산서 담당자 정보 입력 <button type="button" id="sameInfoBtn" class="btn btn-sm btn-black">복사</button></h5>
+                        <div class="form-group">
+                            <label for="">세금계산서 담당자 이름*</label>
+                            <input type="text" class="form-control" name="tax_manager_name" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">세금계산서 담당자 이메일*</label>
+                            <input type="text" class="form-control" name="tax_manager_email" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">직위</label>
+                            <input type="text" class="form-control" name="tax_manager_position" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">전화번호*</label>
+                            <input type="text" class="form-control" name="tax_manager_tel" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">휴대전화</label>
+                            <input type="text" class="form-control" name="tax_manager_phone" value="">
+                        </div>
+                        <div class="form-group">
+                            <label for="">팩스</label>
+                            <input type="text" class="form-control" name="tax_manager_fax" value="">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="section">
+                    <div class="row justify-content-between">
+                        <div class="col-6">
+                            <button type="button" id="prevBtn" class="btn btn-sm btn-black">이전</button>
+                        </div>
+                        <div class="col-6 text-right">
+                            <button type="submit" class="btn btn-sm btn-black">다음</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+
+</script>
+<script id="template-entry-step3" type="text/x-handlebars-template">
+    <div class="row justify-content-center">
+        <div class="col-10 ml-auto mr-auto">
+            <h2>감사합니다.</h2>
+            <h4>
+                신청하신 고객님의 소중한 정보,<br>
+                확인 후 준비가 완료되면 연락 드리겠습니다.
+            </h4>
+            <ul>
+                <li>
+                    <div class="row">
+                        <div class="col-4">
+                            <span class="form-title">기업명</span>
+                        </div>
+                        <div class="col-8">
+                            {{formData.company_name}}
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="row">
+                        <div class="col-4">
+                            <span class="form-title">출품담당자명</span>
+                        </div>
+                        <div class="col-8">
+                            {{formData.manager_name}}
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="row">
+                        <div class="col-4">
+                            <span class="form-title">세금계산서 담당자명</span>
+                        </div>
+                        <div class="col-8">
+                            {{formData.tax_manager_name}}
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <h4>
+                입력하신 정보의 수정이 필요한 경우<br>
+                고객센터 (1577-8764)로 연락주시면, 빠른 처리가 가능합니다.
+            </h4>
+            <a href="/" class="btn btn-black">메인으로</a>
+        </div>
+    </div>
+</script>
